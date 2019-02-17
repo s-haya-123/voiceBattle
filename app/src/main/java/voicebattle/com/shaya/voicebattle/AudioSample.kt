@@ -14,12 +14,12 @@ import kotlin.math.abs
 /**
  * AudioRecord クラスのサンプルコード
  */
-class AudioSample {
+class AudioSample(val graphSample: GraphSample) {
 
     var audioRecord: AudioRecord //録音用のオーディオレコードクラス
     val SAMPLING_RATE = 44100 //オーディオレコード用サンプリング周波数
     private var bufSize: Int//オーディオレコード用バッファのサイズ
-    private var shortData: ShortArray? = null //オーディオレコード用バッファ
+    private var shortData: ShortArray //オーディオレコード用バッファ
     private  var playShortData:ShortArray
     private val loopcnt = 500
     private  val framerate = 2
@@ -46,15 +46,17 @@ class AudioSample {
         audioRecord.setRecordPositionUpdateListener(object : AudioRecord.OnRecordPositionUpdateListener {
             // フレームごとの処理
             override fun onPeriodicNotification(recorder: AudioRecord) {
-                // TODO Auto-generated method stub
+                val max = shortData.max()!!.toFloat()
+                val min = shortData.min()!!.toFloat()
+                val values = if(abs(max) > abs(min)) max else min
+                graphSample.addGraph(values)
                 System.arraycopy(shortData,0,playShortData,cnt * oneFrameDataCount,oneFrameDataCount)
-                audioRecord.read(shortData!!, 0, oneFrameDataCount) // 読み込む
+                audioRecord.read(shortData, 0, oneFrameDataCount) // 読み込む
                 cnt++
                 Log.d("sound",cnt.toString())
             }
 
             override fun onMarkerReached(recorder: AudioRecord) {
-                // TODO Auto-generated method stub
                 Log.d("sound","marker")
 
             }
@@ -80,7 +82,7 @@ class AudioSample {
 //        player.reloadStaticData()
         player.setPlaybackRate(SAMPLING_RATE)
         player.play()
-        player.write(playShortData, 0, playShortData!!.size)
+        player.write(playShortData, 0, playShortData.size)
         player.stop()
         player.flush()
     }
@@ -88,7 +90,7 @@ class AudioSample {
 
     fun startAudioRecord() {
         audioRecord.startRecording()
-        audioRecord.read(shortData!!, 0, oneFrameDataCount)
+        audioRecord.read(shortData, 0, oneFrameDataCount)
 //        (0..loopcnt-1).forEach {
 //            audioRecord.read(shortData!!, 0, bufSize / 2)
 //            System.arraycopy(shortData,0,playShortData,it * bufSize / 2,bufSize / 2)

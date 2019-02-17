@@ -28,14 +28,34 @@ class GraphSample(val context: Activity) {
         //  追加描画するデータを追加
 //        val format = SimpleDateFormat("HH:mm:ss")
 //        data.addXValue(format.format(date))
-        data.addEntry(Entry(value , set.entryCount.toFloat()), 0)
+        data.addEntry(Entry( set.entryCount.toFloat(),value ), 0)
 
         //  データを追加したら必ずよばないといけない
         mChart.notifyDataSetChanged()
+        mChart.invalidate()
 
 //        mChart.setVisibleXRangeMaximum(60) //  解説
 //
 //        mChart.moveViewToX(data.getXValCount() - 61)   //  移動する
+    }
+    fun addGraph(values:ShortArray){
+        val mChart = context.line_chart
+        val data = mChart.getData() ?: return
+
+        var set: LineDataSet = data.getDataSetByIndex(0) as LineDataSet
+        if (set == null) {
+            set = LineDataSet(null, "サンプルデータ") //  解説
+            set.color = Color.BLUE
+            set.setDrawValues(false)
+            data.addDataSet(set)
+        }
+        values.forEach {
+            data.addEntry(Entry( set.entryCount.toFloat(),it.toFloat() ), 0)
+        }
+
+
+        //  データを追加したら必ずよばないといけない
+        mChart.notifyDataSetChanged()
     }
     fun setGraph(){
         val mChart: LineChart = context.line_chart
@@ -53,8 +73,8 @@ class GraphSample(val context: Activity) {
 
         val leftAxis = mChart.getAxisLeft()
         // Y軸最大最小設定
-        leftAxis.setAxisMaximum(150f)
-        leftAxis.setAxisMinimum(0f)
+        leftAxis.setAxisMaximum(1000f)
+        leftAxis.setAxisMinimum(-1000f)
         // Grid横軸を破線
         leftAxis.enableGridDashedLine(10f, 10f, 0f)
         leftAxis.setDrawZeroLine(true)
@@ -64,12 +84,12 @@ class GraphSample(val context: Activity) {
 
         setData(mChart)
 
-        mChart.animateX(2500)
+//        mChart.animateX(2500)
     }
 
     private fun setData(mChart: LineChart) {
         // Entry()を使ってLineDataSetに設定できる形に変更してarrayを新しく作成
-        val data = intArrayOf(116, 111, 112, 121, 102, 83, 99, 101, 74, 105, 120, 112, 109, 102, 107, 93, 82, 99, 110)
+        val data = intArrayOf(0)
 
         val values = ArrayList<Entry>()
 

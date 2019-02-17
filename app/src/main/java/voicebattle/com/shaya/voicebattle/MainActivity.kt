@@ -18,7 +18,7 @@ import com.github.mikephil.charting.data.LineDataSet
 
 
 class MainActivity : AppCompatActivity() {
-    val audioSample:AudioSample = AudioSample()
+    lateinit var audioSample:AudioSample
     lateinit var graphSample:GraphSample
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +34,9 @@ class MainActivity : AppCompatActivity() {
         }
         graphSample = GraphSample(this)
         graphSample.setGraph()
-        graphSample.addGraph(130f)
-        graphSample.addGraph(150f)
+        audioSample= AudioSample(graphSample)
+//
+//        graphSample.addGraph(shortArrayOf(1,2,3))
     }
 
 }
