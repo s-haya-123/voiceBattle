@@ -1,5 +1,6 @@
 package voicebattle.com.shaya.voicebattle
 
+import android.content.Intent
 import android.media.*
 import android.util.Log
 import kotlin.math.max
@@ -8,6 +9,12 @@ import android.media.AudioFormat.CHANNEL_OUT_STEREO
 import android.media.AudioFormat.ENCODING_PCM_16BIT
 import android.media.AudioAttributes
 import android.media.AudioTrack
+import android.os.Bundle
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
+import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.math.abs
 
 
@@ -64,6 +71,59 @@ class AudioSample(val graphSample: GraphSample) {
         // コールバックが呼ばれる間隔を指定
         audioRecord.positionNotificationPeriod = oneFrameDataCount
         Log.d("sound","${AudioRecord.getMinBufferSize(SAMPLING_RATE,AudioFormat.CHANNEL_IN_MONO,AudioFormat.ENCODING_PCM_16BIT)}, ${oneFrameDataCount}")
+    }
+
+    fun getRecognition(context:MainActivity):SpeechRecognizer{
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.getPackageName())
+        val recognizer = SpeechRecognizer.createSpeechRecognizer(context)
+        recognizer.setRecognitionListener(object : RecognitionListener {
+            override fun onReadyForSpeech(params: Bundle) {
+                Toast.makeText(context, "音声認識準備完了", Toast.LENGTH_SHORT)
+            }
+
+            // 音声入力開始
+            override fun onBeginningOfSpeech() {
+                Toast.makeText(context, "入力開始", Toast.LENGTH_SHORT)
+            }
+
+            // 録音データのフィードバック用
+            override fun onBufferReceived(buffer: ByteArray) {
+                Log.v("tag", "onBufferReceived")
+            }
+
+            // 入力音声のdBが変化した
+            override fun onRmsChanged(rmsdB: Float) {
+                Log.v("tag", "recieve : " + rmsdB + "dB")
+            }
+
+            // 音声入力終了
+            override fun onEndOfSpeech() {
+                Toast.makeText(context, "入力終了", Toast.LENGTH_SHORT)
+            }
+
+            // ネットワークエラー又は、音声認識エラー
+            override fun onError(error: Int) {
+
+            }
+
+            // イベント発生時に呼び出される
+            override fun onEvent(eventType: Int, params: Bundle) {
+                Log.v("tag", "onEvent")
+            }
+
+            // 部分的な認識結果が得られる場合に呼び出される
+            override fun onPartialResults(partialResults: Bundle) {
+                Log.d("tag", "onPartialResults")
+            }
+
+            override fun onResults(results: Bundle) {
+                val recData = results.getStringArrayList(android.speech.SpeechRecognizer.RESULTS_RECOGNITION)
+                Toast.makeText(context,recData.toString(), Toast.LENGTH_LONG)
+            }
+        })
+        return recognizer
     }
     fun playAudioRecord(){
         val player = AudioTrack.Builder()
