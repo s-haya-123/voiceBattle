@@ -16,6 +16,16 @@ import android.speech.SpeechRecognizer
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.math.abs
+import com.ibm.watson.developer_cloud.speech_to_text.v1.SpeechToText
+import com.ibm.watson.developer_cloud.service.security.IamOptions
+import java.util.Arrays.asList
+import com.ibm.watson.developer_cloud.speech_to_text.v1.model.RecognizeOptions
+
+
+
+
+
+
 
 
 /**
@@ -164,5 +174,25 @@ class AudioSample(val graphSample: GraphSample) {
     //オーディオレコードを停止する
     fun stopAudioRecord() {
         audioRecord.stop()
+    }
+
+    fun initSpeechToTextService(context: MainActivity): SpeechToText {
+        val options = IamOptions.Builder()
+                .apiKey(context.getString(R.string.watson_api_key))
+                .build()
+
+        val service = SpeechToText(options)
+
+        service.endPoint = context.getString(R.string.watson_speech_text_api)
+
+        return service
+    }
+    fun recognition(){
+//        val recognizeOptions = RecognizeOptions.Builder()
+//                .audio(playShortData)
+//                .contentType("audio/wav")
+//                .timestamps(true)
+//                .wordAlternativesThreshold(0.9.toFloat())
+//                .build()
     }
 }

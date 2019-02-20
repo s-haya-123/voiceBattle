@@ -12,7 +12,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val recognizer = audioSample.getRecognition(this)
+        graphSample = GraphSample(this)
+        graphSample.setGraph()
+        audioSample= AudioSample(graphSample)
+        val speechService = audioSample.initSpeechToTextService(this)
+//        val recognizer = audioSample.getRecognition(this)
         record.setOnClickListener{
             audioSample.startAudioRecord()
         }
@@ -24,11 +28,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         recognition.setOnClickListener {
-            recognizer.startListening(intent)
+
         }
-        graphSample = GraphSample(this)
-        graphSample.setGraph()
-        audioSample= AudioSample(graphSample)
 //
 //        graphSample.addGraph(shortArrayOf(1,2,3))
     }
