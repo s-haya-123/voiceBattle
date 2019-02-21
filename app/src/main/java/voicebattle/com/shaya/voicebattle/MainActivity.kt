@@ -1,8 +1,10 @@
 package voicebattle.com.shaya.voicebattle
 
+import android.animation.ValueAnimator
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import kotlinx.android.synthetic.main.activity_main.*
+import android.widget.Button
+import kotlinx.android.synthetic.main.battle_layout.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -12,27 +14,20 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.battle_layout)
-//        graphSample = GraphSample(this)
-//        graphSample.setGraph()
-//        audioSample= AudioSample(graphSample)
-//        val speechService = audioSample.initSpeechToTextService(this)
-//        audioSample.recognition(speechService)
-//        val recognizer = audioSample.getRecognition(this)
-//        record.setOnClickListener{
-//            audioSample.startAudioRecord()
-//        }
-//        stop.setOnClickListener {
-//            audioSample.stopAudioRecord()
-//        }
-//        play.setOnClickListener {
-//            audioSample.playAudioRecord()
-//        }
-//
-//        recognition.setOnClickListener {
-//
-//        }
-//
-//        graphSample.addGraph(shortArrayOf(1,2,3))
+
+
+        calculate_start.setOnClickListener {
+           ValueAnimator().apply {
+                setIntValues(0,100)
+                addUpdateListener {anim:ValueAnimator->
+                    battleValue.text = anim.animatedValue.toString()
+                }
+                setDuration(300)
+                start()
+            }
+
+        }
+
     }
 
 }
