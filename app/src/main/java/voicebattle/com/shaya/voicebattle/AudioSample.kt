@@ -20,6 +20,10 @@ import com.ibm.watson.developer_cloud.speech_to_text.v1.SpeechToText
 import com.ibm.watson.developer_cloud.service.security.IamOptions
 import java.util.Arrays.asList
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.RecognizeOptions
+import android.os.AsyncTask.execute
+import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechModels
+
+
 
 
 
@@ -187,9 +191,11 @@ class AudioSample(val graphSample: GraphSample) {
 
         return service
     }
-    fun recognition(){
+    fun recognition(speechToText:SpeechToText){
+        val speechModels = speechToText.listModels().execute()
+        Log.d("model",speechModels.toString())
 //        val recognizeOptions = RecognizeOptions.Builder()
-//                .audio(playShortData)
+//                .audio(audioRecord)
 //                .contentType("audio/wav")
 //                .timestamps(true)
 //                .wordAlternativesThreshold(0.9.toFloat())
