@@ -19,11 +19,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.battle_layout)
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            // RECORD_AUDIO の実行時パーミッションを要求
-            ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.RECORD_AUDIO), 1)
-        }
+        setPermission()
         calculate_start.setOnClickListener {
            ValueAnimator().apply {
                 setIntValues(0,100)
@@ -37,5 +33,12 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+    private fun setPermission(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.RECORD_AUDIO), 1)
+        }
+    }
+
 
 }
