@@ -9,11 +9,10 @@ import kotlin.math.max
 
 class AudioController {
     val audioRecord: AudioRecord
-    val SAMPLING_RATE = 44100
-    private var bufSize: Int
     private var shortData: ShortArray
     init {
-        bufSize = max(1 * 10,AudioRecord.getMinBufferSize(SAMPLING_RATE,
+        val SAMPLING_RATE = 44100
+        val bufSize = max(1 * 10,AudioRecord.getMinBufferSize(SAMPLING_RATE,
                 AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT))
         val oneFrameDataCount = bufSize/2
