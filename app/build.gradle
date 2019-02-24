@@ -31,7 +31,7 @@ dependencies {
     implementation 'com.ibm.watson.developer_cloud:speech-to-text:6.14.0'
     implementation 'com.google.dagger:dagger-android:2.20'
     implementation 'com.google.dagger:dagger-android-support:2.20'
-    kapt 'com.google.dagger:dagger-android-processor:2.20'
+    annotationProcessor  'com.google.dagger:dagger-android-processor:2.20'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
