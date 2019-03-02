@@ -8,15 +8,19 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import kotlinx.android.synthetic.main.battle_layout.*
-import voicebattle.com.shaya.voicebattle.di.AudioModule
+import voicebattle.com.shaya.voicebattle.di.AudioActionCreatorModule
 import voicebattle.com.shaya.voicebattle.di.DaggerAppComponent
+import voicebattle.com.shaya.voicebattle.di.DispatcherModule
 import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
     @Inject lateinit var audioActionCreator: AudioActionCreator
 
-    val appComponent = DaggerAppComponent.builder().audioModule(AudioModule()).build()
+    val appComponent = DaggerAppComponent.builder()
+            .audioActionCreatorModule(AudioActionCreatorModule())
+            .dispatcherModule(DispatcherModule())
+            .build()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.battle_layout)

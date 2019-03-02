@@ -8,7 +8,8 @@ import javax.inject.Singleton
 @Singleton
 @Component(
         modules = [
-        AudioModule::class
+            AudioActionCreatorModule::class,
+            DispatcherModule::class
         ]
 )
 interface AppComponent {

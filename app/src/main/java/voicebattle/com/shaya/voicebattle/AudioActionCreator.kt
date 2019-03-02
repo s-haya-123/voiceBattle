@@ -1,9 +1,10 @@
 package voicebattle.com.shaya.voicebattle
 
 import android.util.Log
+import javax.inject.Inject
 
-class AudioActionCreator {
+class AudioActionCreator @Inject constructor(private val dispatcher: Dispatcher) {
     fun test(){
-        Log.d("test","hello dagger")
+        dispatcher.testDispatch()
     }
 }
