@@ -7,20 +7,24 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.widget.Button
 import kotlinx.android.synthetic.main.battle_layout.*
+import voicebattle.com.shaya.voicebattle.di.AudioModule
+import voicebattle.com.shaya.voicebattle.di.DaggerAppComponent
+import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
-    lateinit var audioSample:AudioSample
-    lateinit var graphSample:GraphSample
+    @Inject lateinit var audioActionCreator: AudioActionCreator
 
+    val appComponent = DaggerAppComponent.builder().audioModule(AudioModule()).build()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.battle_layout)
+        appComponent.inject(this)
 
         setPermission()
         calculate_start.setOnClickListener {
+            audioActionCreator.test()
            ValueAnimator().apply {
                 setIntValues(0,100)
                 addUpdateListener {anim:ValueAnimator->
@@ -31,6 +35,7 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+
 
     }
     private fun setPermission(){
