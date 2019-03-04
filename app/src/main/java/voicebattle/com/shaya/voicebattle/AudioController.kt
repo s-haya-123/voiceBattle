@@ -30,13 +30,26 @@ class AudioController @Inject constructor(private val audioActionCreator: AudioA
                 bufSize).apply {
             // コールバックを指定
             setRecordPositionUpdateListener(object : AudioRecord.OnRecordPositionUpdateListener {
+                var cnt = 0
+                var loopCnt = 10
+                var playShortData = initPlayShortData(oneFrameDataCount,loopCnt)
                 // フレームごとの処理
                 override fun onPeriodicNotification(recorder: AudioRecord) {
-                    val avarageVolume = shortData.map { abs(it.toFloat()) }.average()
-                    audioActionCreator.updateMicVolume(avarageVolume.toInt())
+                    System.arraycopy(shortData,0,playShortData,cnt * oneFrameDataCount,oneFrameDataCount)
+                    if(loopCnt == cnt ){
+                        val avarageVolume = playShortData.map { abs(it.toFloat()) }.average().toInt()
+                        audioActionCreator.updateMicVolume(avarageVolume)
+                        playShortData = initPlayShortData(oneFrameDataCount,loopCnt)
+                        cnt = 0
+                    } else {
+                        cnt++
+                    }
                     this@apply.read(shortData, 0, oneFrameDataCount)
-                }
 
+                }
+                private fun initPlayShortData(frame:Int,loopCnt:Int):ShortArray{
+                    return ShortArray(frame * (loopCnt+1))
+                }
                 override fun onMarkerReached(recorder: AudioRecord) {
 
                 }

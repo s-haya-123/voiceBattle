@@ -180,25 +180,5 @@ class AudioSample(val graphSample: GraphSample) {
         audioRecord.stop()
     }
 
-    fun initSpeechToTextService(context: MainActivity): SpeechToText {
-        val options = IamOptions.Builder()
-                .apiKey(context.getString(R.string.watson_api_key))
-                .build()
 
-        val service = SpeechToText(options)
-
-        service.endPoint = context.getString(R.string.watson_speech_text_api)
-
-        return service
-    }
-    fun recognition(speechToText:SpeechToText){
-        val speechModels = speechToText.listModels().execute()
-        Log.d("model",speechModels.toString())
-//        val recognizeOptions = RecognizeOptions.Builder()
-//                .audio(audioRecord)
-//                .contentType("audio/wav")
-//                .timestamps(true)
-//                .wordAlternativesThreshold(0.9.toFloat())
-//                .build()
-    }
 }
