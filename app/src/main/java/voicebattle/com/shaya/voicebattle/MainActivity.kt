@@ -7,35 +7,51 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.widget.Button
+import android.util.Log
 import kotlinx.android.synthetic.main.battle_layout.*
+import voicebattle.com.shaya.voicebattle.di.AudioActionCreatorModule
+import voicebattle.com.shaya.voicebattle.di.DaggerAppComponent
+import voicebattle.com.shaya.voicebattle.di.DispatcherModule
+import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
-    lateinit var audioSample:AudioSample
-    lateinit var graphSample:GraphSample
+    @Inject lateinit var audioActionCreator: AudioActionCreator
+    @Inject lateinit var audioStore: AudioStore
+    @Inject lateinit var audioController: AudioController
 
+    val appComponent = DaggerAppComponent.builder()
+            .audioActionCreatorModule(AudioActionCreatorModule())
+            .dispatcherModule(DispatcherModule())
+            .build()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.battle_layout)
+        appComponent.inject(this)
 
+        setPermission()
+        calculate_start.setOnClickListener {
+//           audioActionCreator.test()
+//           ValueAnimator().apply {
+//                setIntValues(0,100)
+//                addUpdateListener {anim:ValueAnimator->
+//                    battleValue.text = anim.animatedValue.toString()
+//                }
+//                setDuration(300)
+//                start()
+//            }
+            audioController.startRecord()
+        }
+        audioStore.refreshValume.subscribe{
+            battleValue.text = it.toString()
+        }
+    }
+    private fun setPermission(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            // RECORD_AUDIO の実行時パーミッションを要求
             ActivityCompat.requestPermissions(this,
                     arrayOf(Manifest.permission.RECORD_AUDIO), 1)
         }
-        calculate_start.setOnClickListener {
-           ValueAnimator().apply {
-                setIntValues(0,100)
-                addUpdateListener {anim:ValueAnimator->
-                    battleValue.text = anim.animatedValue.toString()
-                }
-                setDuration(300)
-                start()
-            }
-
-        }
-
     }
+
 
 }
