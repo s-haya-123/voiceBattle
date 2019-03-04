@@ -32,7 +32,8 @@ class AudioController @Inject constructor(private val audioActionCreator: AudioA
             setRecordPositionUpdateListener(object : AudioRecord.OnRecordPositionUpdateListener {
                 // フレームごとの処理
                 override fun onPeriodicNotification(recorder: AudioRecord) {
-                    audioActionCreator.test()
+                    val avarageVolume = shortData.map { abs(it.toFloat()) }.average()
+                    audioActionCreator.updateMicVolume(avarageVolume.toInt())
                     this@apply.read(shortData, 0, oneFrameDataCount)
                 }
 

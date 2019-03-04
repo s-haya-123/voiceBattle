@@ -42,7 +42,9 @@ class MainActivity : AppCompatActivity() {
 //            }
             audioController.startRecord()
         }
-        audioStore.refreshValume.subscribe{ Log.d("storeTest",it.toString())}
+        audioStore.refreshValume.subscribe{
+            battleValue.text = it.toString()
+        }
     }
     private fun setPermission(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
