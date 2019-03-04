@@ -18,6 +18,7 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
     @Inject lateinit var audioActionCreator: AudioActionCreator
     @Inject lateinit var audioStore: AudioStore
+    @Inject lateinit var audioController: AudioController
 
     val appComponent = DaggerAppComponent.builder()
             .audioActionCreatorModule(AudioActionCreatorModule())
@@ -30,20 +31,18 @@ class MainActivity : AppCompatActivity() {
 
         setPermission()
         calculate_start.setOnClickListener {
-            audioActionCreator.test()
-           ValueAnimator().apply {
-                setIntValues(0,100)
-                addUpdateListener {anim:ValueAnimator->
-                    battleValue.text = anim.animatedValue.toString()
-                }
-                setDuration(300)
-                start()
-            }
-
+//           audioActionCreator.test()
+//           ValueAnimator().apply {
+//                setIntValues(0,100)
+//                addUpdateListener {anim:ValueAnimator->
+//                    battleValue.text = anim.animatedValue.toString()
+//                }
+//                setDuration(300)
+//                start()
+//            }
+            audioController.startRecord()
         }
         audioStore.refreshValume.subscribe{ Log.d("storeTest",it.toString())}
-
-
     }
     private fun setPermission(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
