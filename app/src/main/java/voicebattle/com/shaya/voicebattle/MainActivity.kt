@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.battle_layout)
         val meterSurface = MeterSurface(this)
         mainLayout.addView(meterSurface)
+        meterSurface.invalidate()
 
         appComponent.inject(this)
 
