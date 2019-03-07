@@ -16,7 +16,6 @@ import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
-    @Inject lateinit var audioActionCreator: AudioActionCreator
     @Inject lateinit var audioStore: AudioStore
     @Inject lateinit var audioController: AudioController
 
@@ -29,7 +28,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.battle_layout)
         val meterSurface = MeterSurface(this)
         mainLayout.addView(meterSurface)
-        meterSurface.invalidate()
 
         appComponent.inject(this)
 
