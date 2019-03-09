@@ -1,10 +1,6 @@
 package voicebattle.com.shaya.voicebattle
 
-import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Point
+import android.graphics.*
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import kotlin.math.sin
@@ -32,20 +28,26 @@ class MeterSurface(activity: MainActivity?) : SurfaceView(activity),SurfaceHolde
                 drawColor(Color.WHITE)
                 val paint = Paint().apply {
                     color = Color.GREEN
-                    strokeWidth = 10f
+                    strokeWidth = 150f
                     style = Paint.Style.STROKE
                 }
                 point?.let{
-                    drawCircle(it.x /2.toFloat(),it.y/2.toFloat(),10f,paint)
+//                    drawCircle(it.x /2.toFloat(),it.y/2.toFloat(),10f,paint)
                     drawCircleOnCircleTrajectory(this,it,paint,0f)
-                    drawCircleOnCircleTrajectory(this,it,paint,20f)
-                    drawCircleOnCircleTrajectory(this,it,paint,30f)
+                    drawCircleOnDisplayCenter(this,it,1200f,paint)
                 }
 
             }
             holder.unlockCanvasAndPost(canvas);
         }
     }
+    private fun drawCircleOnDisplayCenter(canvas: Canvas, displaySize: Point, r:Float, paint: Paint){
+        val centerX = (displaySize.x /2).toFloat()
+        var centerY = (displaySize.y/2).toFloat()
+        var rect = RectF(centerX-r/2,centerY-r/2,centerX+r/2,centerY+r/2)
+        canvas.drawArc(rect,180f,180f,false,paint)
+    }
+
     private fun drawCircleOnCircleTrajectory(canvas: Canvas,point: Point,paint:Paint,percent: Float){
         val (x,y) = calcMetorPoint(percent,300f,point.x/2.toFloat(),point.y/2.toFloat())
         canvas.drawCircle(x.toFloat(),y.toFloat(),10f,paint)
