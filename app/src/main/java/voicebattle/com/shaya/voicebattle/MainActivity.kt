@@ -26,10 +26,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.battle_layout)
-        val meterSurface = MeterSurface(this)
+        appComponent.inject(this)
+        val meterSurface = MeterSurface(this,audioStore)
         mainLayout.addView(meterSurface)
 
-        appComponent.inject(this)
 
         setPermission()
         calculate_start.setOnClickListener {

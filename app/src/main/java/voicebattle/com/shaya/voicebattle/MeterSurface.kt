@@ -1,18 +1,25 @@
 package voicebattle.com.shaya.voicebattle
 
 import android.graphics.*
+import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import kotlin.concurrent.thread
 import kotlin.math.sin
 
-class MeterSurface(activity: MainActivity?) : SurfaceView(activity),SurfaceHolder.Callback{
-    val point:Point?
+class MeterSurface(activity: MainActivity?,state:AudioStore) : SurfaceView(activity),SurfaceHolder.Callback{
+    val size:Point?
+    var maxVolume:Int = 2000
+    var volume:Int =0
     init {
         super.getHolder().addCallback(this)
-        point = activity?.windowManager?.defaultDisplay?.let {
+        size = activity?.windowManager?.defaultDisplay?.let {
             Point().apply {
                 it.getSize(this)
             }
+        }
+        state.refreshValume.subscribe{
+            volume = it
         }
     }
     override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
@@ -22,24 +29,29 @@ class MeterSurface(activity: MainActivity?) : SurfaceView(activity),SurfaceHolde
     }
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
+        thread {
+            while (true){
+                holder?.let {
+                    val canvas = holder.lockCanvas().apply {
+                        drawColor(Color.WHITE)
+                        val paint = Paint().apply {
+                            color = Color.GREEN
+                            strokeWidth = 150f
+                            style = Paint.Style.STROKE
+                        }
+                        size?.let{
+                            //                    drawCircle(it.x /2.toFloat(),it.y/2.toFloat(),10f,paint)
+                            Log.d("volume",(volume / maxVolume.toFloat() ).toString())
+                            drawCircleOnCircleTrajectory(this,it,paint,500f, volume / maxVolume.toFloat() * 100)
+                            drawCircleOnDisplayCenter(this,it,500f,volume / maxVolume.toFloat() * 100,paint)
+                        }
 
-        holder?.let {
-            val canvas = holder.lockCanvas().apply {
-                drawColor(Color.WHITE)
-                val paint = Paint().apply {
-                    color = Color.GREEN
-                    strokeWidth = 150f
-                    style = Paint.Style.STROKE
+                    }
+                    it.unlockCanvasAndPost(canvas)
                 }
-                point?.let{
-//                    drawCircle(it.x /2.toFloat(),it.y/2.toFloat(),10f,paint)
-                    drawCircleOnCircleTrajectory(this,it,paint,600f, 80f)
-                    drawCircleOnDisplayCenter(this,it,600f,80f,paint)
-                }
-
             }
-            holder.unlockCanvasAndPost(canvas)
         }
+
     }
     private fun drawCircleOnDisplayCenter(canvas: Canvas, displaySize: Point, r:Float,percent:Float, paint: Paint){
         val centerX = (displaySize.x /2).toFloat()
