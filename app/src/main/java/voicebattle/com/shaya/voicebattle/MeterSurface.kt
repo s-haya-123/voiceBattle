@@ -37,7 +37,7 @@ class MeterSurface(activity: MainActivity?,state:AudioStore) : SurfaceView(activ
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
         holder?.let {
-                drawMeter(it,1000,beforeVolume,10)
+                drawMeter(it,0,beforeVolume,10)
         }
     }
 
@@ -46,7 +46,6 @@ class MeterSurface(activity: MainActivity?,state:AudioStore) : SurfaceView(activ
         GlobalScope.launch {
             (0..abs(volume-beforeVolume) step speed).forEach {
                 holder.lockCanvas().apply {
-                    Log.d("beforeV",it.toString())
                     val direction = if(volume > beforeVolume) 1 else -1
                     drawMeterForEach(this,beforeVolume,it * direction)
                     holder.unlockCanvasAndPost(this)
@@ -66,7 +65,7 @@ class MeterSurface(activity: MainActivity?,state:AudioStore) : SurfaceView(activ
         size?.let{
             val r = decideMeterR(it,strokeWidth)
             drawCircleOnCircleTrajectory(canvas,it,paint,r, (volume+deltaVolume).toFloat() / maxVolume * 100)
-            drawCircleOnDisplayCenter(canvas,it,r,(volume+deltaVolume).toFloat() / maxVolume * 100,paint)
+            drawCircleOnDisplayCenter(canvas,it,paint,r,(volume+deltaVolume).toFloat() / maxVolume * 100)
         }
     }
     private fun decideMeterR(displaySize: Point,strokeWidth:Float):Float{
@@ -74,10 +73,10 @@ class MeterSurface(activity: MainActivity?,state:AudioStore) : SurfaceView(activ
         return  (baseSize - strokeWidth) / 2
     }
 
-    private fun drawCircleOnDisplayCenter(canvas: Canvas, displaySize: Point, r:Float,percent:Float, paint: Paint){
+    private fun drawCircleOnDisplayCenter(canvas: Canvas, displaySize: Point, paint: Paint, r:Float,percent:Float){
         val centerX = (displaySize.x /2).toFloat()
-        var centerY = (displaySize.y/2).toFloat()
-        var rect = RectF(centerX-r,centerY-r,centerX+r,centerY+r)
+        val centerY = (displaySize.y/2).toFloat()
+        val rect = RectF(centerX-r,centerY-r,centerX+r,centerY+r)
 
         canvas.drawArc(rect,180f,180f * percent /100,false,paint)
     }
