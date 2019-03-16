@@ -37,9 +37,11 @@ class MeterSurface(activity: MainActivity?,state:AudioStore) : SurfaceView(activ
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
         holder?.let {
-                drawMeter(it,1000,beforeVolume,15)
+                drawMeter(it,1000,beforeVolume,10)
         }
     }
+
+
     private fun drawMeter(holder: SurfaceHolder,volume:Int,beforeVolume:Int,speed:Int){
         GlobalScope.launch {
             (0..abs(volume-beforeVolume) step speed).forEach {
@@ -54,16 +56,22 @@ class MeterSurface(activity: MainActivity?,state:AudioStore) : SurfaceView(activ
     }
     private fun drawMeterForEach(canvas: Canvas,volume: Int,deltaVolume:Int){
         canvas.drawColor(Color.WHITE)
+        val strokeWidth = 150f
         val paint = Paint().apply {
-            color = Color.GREEN
-            strokeWidth = 150f
-            style = Paint.Style.STROKE
+            this.color = Color.GREEN
+            this.strokeWidth = strokeWidth
+            this.style = Paint.Style.STROKE
         }
+
         size?.let{
-            Log.d("volume","${(volume).toFloat()}")
-            drawCircleOnCircleTrajectory(canvas,it,paint,500f, (volume+deltaVolume).toFloat() / maxVolume * 100)
-            drawCircleOnDisplayCenter(canvas,it,500f,(volume+deltaVolume).toFloat() / maxVolume * 100,paint)
+            val r = decideMeterR(it,strokeWidth)
+            drawCircleOnCircleTrajectory(canvas,it,paint,r, (volume+deltaVolume).toFloat() / maxVolume * 100)
+            drawCircleOnDisplayCenter(canvas,it,r,(volume+deltaVolume).toFloat() / maxVolume * 100,paint)
         }
+    }
+    private fun decideMeterR(displaySize: Point,strokeWidth:Float):Float{
+        val baseSize = if(displaySize.x > displaySize.y) displaySize.y else displaySize.x
+        return  (baseSize - strokeWidth) / 2
     }
 
     private fun drawCircleOnDisplayCenter(canvas: Canvas, displaySize: Point, r:Float,percent:Float, paint: Paint){
