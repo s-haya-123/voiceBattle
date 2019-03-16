@@ -4,12 +4,17 @@ import android.graphics.*
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.concurrent.thread
+import kotlin.math.abs
 import kotlin.math.sin
 
 class MeterSurface(activity: MainActivity?,state:AudioStore) : SurfaceView(activity),SurfaceHolder.Callback{
     val size:Point?
     var maxVolume:Int = 2000
+    var beforeVolume:Int=0
     init {
         super.getHolder().addCallback(this)
         size = activity?.windowManager?.defaultDisplay?.let {
@@ -19,7 +24,8 @@ class MeterSurface(activity: MainActivity?,state:AudioStore) : SurfaceView(activ
         }
         state.refreshValume.subscribe{volume->
             holder?.let {
-                drawMeter(it,volume.toFloat())
+                drawMeter(it,volume,beforeVolume,10)
+                beforeVolume = volume
             }
         }
     }
@@ -31,25 +37,35 @@ class MeterSurface(activity: MainActivity?,state:AudioStore) : SurfaceView(activ
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
         holder?.let {
-            drawMeter(it,0f)
+                drawMeter(it,1000,beforeVolume,15)
         }
     }
-    private fun drawMeter(holder: SurfaceHolder,volume:Float){
-        holder.lockCanvas().apply {
-            drawColor(Color.WHITE)
-            val paint = Paint().apply {
-                color = Color.GREEN
-                strokeWidth = 150f
-                style = Paint.Style.STROKE
+    private fun drawMeter(holder: SurfaceHolder,volume:Int,beforeVolume:Int,speed:Int){
+        GlobalScope.launch {
+            (0..abs(volume-beforeVolume) step speed).forEach {
+                holder.lockCanvas().apply {
+                    Log.d("beforeV",it.toString())
+                    val direction = if(volume > beforeVolume) 1 else -1
+                    drawMeterForEach(this,beforeVolume,it * direction)
+                    holder.unlockCanvasAndPost(this)
+                }
             }
-            size?.let{
-                //                    drawCircle(it.x /2.toFloat(),it.y/2.toFloat(),10f,paint)
-                drawCircleOnCircleTrajectory(this,it,paint,500f, volume / maxVolume * 100)
-                drawCircleOnDisplayCenter(this,it,500f,volume / maxVolume * 100,paint)
-            }
-            holder.unlockCanvasAndPost(this)
         }
     }
+    private fun drawMeterForEach(canvas: Canvas,volume: Int,deltaVolume:Int){
+        canvas.drawColor(Color.WHITE)
+        val paint = Paint().apply {
+            color = Color.GREEN
+            strokeWidth = 150f
+            style = Paint.Style.STROKE
+        }
+        size?.let{
+            Log.d("volume","${(volume).toFloat()}")
+            drawCircleOnCircleTrajectory(canvas,it,paint,500f, (volume+deltaVolume).toFloat() / maxVolume * 100)
+            drawCircleOnDisplayCenter(canvas,it,500f,(volume+deltaVolume).toFloat() / maxVolume * 100,paint)
+        }
+    }
+
     private fun drawCircleOnDisplayCenter(canvas: Canvas, displaySize: Point, r:Float,percent:Float, paint: Paint){
         val centerX = (displaySize.x /2).toFloat()
         var centerY = (displaySize.y/2).toFloat()
