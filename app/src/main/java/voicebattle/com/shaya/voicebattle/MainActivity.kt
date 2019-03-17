@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
             val fragmentManager:FragmentManager = this.supportFragmentManager
             val fragmentTransaction:FragmentTransaction = fragmentManager.beginTransaction()
 
-            fragmentTransaction.add(R.id.activity_main,MeterFragment.newInstance(),"ScheduleFlagment")
+            fragmentTransaction.add(R.id.activity_main,RankingFlagment.newInstance(),"ScheduleFlagment")
             fragmentTransaction.commit()
         }
 
