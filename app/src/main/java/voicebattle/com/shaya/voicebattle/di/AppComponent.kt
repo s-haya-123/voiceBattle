@@ -2,6 +2,7 @@ package voicebattle.com.shaya.voicebattle.di
 
 import dagger.Component
 import voicebattle.com.shaya.voicebattle.MainActivity
+import voicebattle.com.shaya.voicebattle.MeterFragment
 import javax.inject.Singleton
 
 
@@ -13,5 +14,5 @@ import javax.inject.Singleton
         ]
 )
 interface AppComponent {
-    fun inject(activity: MainActivity)
+    fun inject(meterFragment: MeterFragment)
 }

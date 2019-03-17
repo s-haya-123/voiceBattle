@@ -6,6 +6,8 @@ import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentTransaction
 import android.support.v4.content.ContextCompat
 import android.util.Log
 import kotlinx.android.synthetic.main.battle_layout.*
@@ -16,37 +18,21 @@ import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
-    @Inject lateinit var audioStore: AudioStore
-    @Inject lateinit var audioController: AudioController
 
-    val appComponent = DaggerAppComponent.builder()
-            .audioActionCreatorModule(AudioActionCreatorModule())
-            .dispatcherModule(DispatcherModule())
-            .build()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.battle_layout)
-        appComponent.inject(this)
-        val meterSurface = MeterSurface(this,audioStore)
-        mainLayout.addView(meterSurface)
-
+        setContentView(R.layout.activity_main)
 
         setPermission()
-        calculate_start.setOnClickListener {
-//           audioActionCreator.test()
-//           ValueAnimator().apply {
-//                setIntValues(0,100)
-//                addUpdateListener {anim:ValueAnimator->
-//                    battleValue.text = anim.animatedValue.toString()
-//                }
-//                setDuration(300)
-//                start()
-//            }
-            audioController.startRecord()
+
+        if(savedInstanceState == null){
+            val fragmentManager:FragmentManager = this.supportFragmentManager
+            val fragmentTransaction:FragmentTransaction = fragmentManager.beginTransaction()
+
+            fragmentTransaction.add(R.id.activity_main,MeterFragment.newInstance(),"ScheduleFlagment")
+            fragmentTransaction.commit()
         }
-        audioStore.refreshValume.subscribe{
-            battleValue.text = it.toString()
-        }
+
     }
     private fun setPermission(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
