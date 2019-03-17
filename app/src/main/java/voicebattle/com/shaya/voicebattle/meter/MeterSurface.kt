@@ -1,17 +1,15 @@
-package voicebattle.com.shaya.voicebattle
+package voicebattle.com.shaya.voicebattle.meter
 
 import android.graphics.*
-import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.concurrent.thread
+import voicebattle.com.shaya.voicebattle.MainActivity
 import kotlin.math.abs
 import kotlin.math.sin
 
-class MeterSurface(activity: MainActivity?,state:AudioStore) : SurfaceView(activity),SurfaceHolder.Callback{
+class MeterSurface(activity: MainActivity?, state: AudioStore) : SurfaceView(activity),SurfaceHolder.Callback{
     val size:Point?
     var maxVolume:Int = 2000
     var beforeVolume:Int=0

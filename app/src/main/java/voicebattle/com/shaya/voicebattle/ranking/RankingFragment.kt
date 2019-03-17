@@ -1,4 +1,4 @@
-package voicebattle.com.shaya.voicebattle
+package voicebattle.com.shaya.voicebattle.ranking
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.firebase.firestore.FirebaseFirestore
+import voicebattle.com.shaya.voicebattle.R
 
 class RankingFlagment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

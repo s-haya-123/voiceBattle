@@ -1,8 +1,7 @@
 package voicebattle.com.shaya.voicebattle.di
 
 import dagger.Component
-import voicebattle.com.shaya.voicebattle.MainActivity
-import voicebattle.com.shaya.voicebattle.MeterFragment
+import voicebattle.com.shaya.voicebattle.meter.MeterFragment
 import javax.inject.Singleton
 
 

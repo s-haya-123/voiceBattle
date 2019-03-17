@@ -1,7 +1,6 @@
-package voicebattle.com.shaya.voicebattle
+package voicebattle.com.shaya.voicebattle.meter
 
-import android.arch.lifecycle.LiveData
-import android.util.Log
+import voicebattle.com.shaya.voicebattle.Dispatcher
 import javax.inject.Inject
 
 class AudioStore @Inject constructor( val dispatcher: Dispatcher) {

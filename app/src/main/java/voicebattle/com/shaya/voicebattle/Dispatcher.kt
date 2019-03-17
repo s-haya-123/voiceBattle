@@ -8,11 +8,11 @@ import java.util.*
 import javax.inject.Inject
 
 class Dispatcher {
-    private val processor = PublishProcessor.create<AudioAction>().toSerialized()
-    fun dispatch(action: AudioAction) {
+    private val processor = PublishProcessor.create<Action>().toSerialized()
+    fun dispatch(action: Action) {
         processor.onNext(action)
     }
-    fun <T : AudioAction> on(clazz: Class<T>): Observable<T> {
+    fun <T : Action> on(clazz: Class<T>): Observable<T> {
         return processor.onBackpressureBuffer()
                 .ofType(clazz)
                 .observeOn(AndroidSchedulers.mainThread())

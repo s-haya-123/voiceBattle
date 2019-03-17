@@ -1,9 +1,8 @@
-package voicebattle.com.shaya.voicebattle
+package voicebattle.com.shaya.voicebattle.meter
 
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
-import android.util.Log
 import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.max
