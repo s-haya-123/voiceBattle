@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.battle_layout.*
 import voicebattle.com.shaya.voicebattle.MainActivity
 import voicebattle.com.shaya.voicebattle.R
-import voicebattle.com.shaya.voicebattle.di.AudioActionCreatorModule
-import voicebattle.com.shaya.voicebattle.di.DaggerAppComponent
+import voicebattle.com.shaya.voicebattle.di.ActionCreatorModule
+import voicebattle.com.shaya.voicebattle.di.DaggerMeterComponent
 import voicebattle.com.shaya.voicebattle.di.DispatcherModule
 import javax.inject.Inject
 
@@ -19,8 +19,8 @@ class MeterFragment :Fragment(){
     @Inject
     lateinit var audioController: AudioController
 
-    val appComponent = DaggerAppComponent.builder()
-            .audioActionCreatorModule(AudioActionCreatorModule())
+    val appComponent = DaggerMeterComponent.builder()
+            .actionCreatorModule(ActionCreatorModule())
             .dispatcherModule(DispatcherModule())
             .build()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

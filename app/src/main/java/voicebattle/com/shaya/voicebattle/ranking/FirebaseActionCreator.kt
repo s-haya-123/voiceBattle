@@ -7,4 +7,5 @@ class FirebaseActionCreator @Inject constructor(val dispatcher: Dispatcher){
     fun getRanking(){
 
     }
+    fun test() = dispatcher.dispatch(FirebaseAction.Test("test"))
 }

@@ -8,10 +8,11 @@ import javax.inject.Singleton
 @Singleton
 @Component(
         modules = [
-            AudioActionCreatorModule::class,
-            DispatcherModule::class
+            ActionCreatorModule::class,
+            DispatcherModule::class,
+            AudioControllerModule::class
         ]
 )
-interface AppComponent {
+interface MeterComponent {
     fun inject(meterFragment: MeterFragment)
 }
