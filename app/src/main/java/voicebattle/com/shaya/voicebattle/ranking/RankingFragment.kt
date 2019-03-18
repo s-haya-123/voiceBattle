@@ -27,7 +27,6 @@ class RankingFlagment : Fragment() {
             .build()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        getRankingFromFirebase()
         return inflater.inflate(R.layout.ranking,container,false)
     }
 
@@ -37,23 +36,13 @@ class RankingFlagment : Fragment() {
         store.test.subscribe {
             rank_text.text = it
         }
-        actionCreator.test()
-    }
-    private fun getRankingFromFirebase(){
-        val db = FirebaseFirestore.getInstance()
-        db.collection("ranking")
-                .get()
-                .addOnCompleteListener {task ->
-                    if(task.isSuccessful){
-                        task.getResult().forEach {
-                            Log.d("fbLog","${it.id} ${it.data.toString()}")
-                        }
-                    } else {
-                        Log.d("fbLog",task.exception.toString())
-                    }
-                }
+        store.entities.subscribe {
+            Log.d("fbLog",it.toString())
+        }
 
+        actionCreator.getRanking()
     }
+
     companion object {
         fun newInstance()  = RankingFlagment()
     }

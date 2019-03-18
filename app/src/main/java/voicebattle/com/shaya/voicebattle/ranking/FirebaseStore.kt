@@ -6,4 +6,6 @@ import javax.inject.Inject
 class FirebaseStore @Inject constructor(val dispatcher: Dispatcher) {
     var test = dispatcher.on(FirebaseAction.Test::class.java)
             .map { it.test }
+    var entities = dispatcher.on(FirebaseAction.Ranking::class.java)
+            .map { it.enitities }
 }
