@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.ranking.*
 import voicebattle.com.shaya.voicebattle.R
@@ -33,11 +34,15 @@ class RankingFlagment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         appComponent.inject(this)
-        store.test.subscribe {
-            rank_text.text = it
-        }
         store.entities.subscribe {
-            Log.d("fbLog",it.toString())
+            it.forEach {
+                val ranking_line = layoutInflater.inflate(R.layout.ranking_line,null).apply {
+                    findViewById<TextView>(R.id.rank_text).text = (it.ranking+1).toString()
+                    findViewById<TextView>(R.id.name_text).text = it.name
+                    findViewById<TextView>(R.id.power_text).text = it.power.toString()
+                }
+                ranking_list.addView(ranking_line)
+            }
         }
 
         actionCreator.getRanking()
