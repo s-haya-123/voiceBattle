@@ -2,6 +2,7 @@ package voicebattle.com.shaya.voicebattle.ranking
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import voicebattle.com.shaya.voicebattle.Dispatcher
 import java.util.*
 import javax.inject.Inject
@@ -13,7 +14,7 @@ class FirebaseActionCreator @Inject constructor(val dispatcher: Dispatcher){
     fun getRanking(){
         val db = FirebaseFirestore.getInstance()
         db.collection(COLLECTION_NAME)
-                .orderBy(RankingEntity.POWER)
+                .orderBy(RankingEntity.POWER,Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener {task ->
                     if(task.isSuccessful){
