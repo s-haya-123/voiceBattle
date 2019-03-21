@@ -15,8 +15,8 @@ class FirebaseActionCreator @Inject constructor(val dispatcher: Dispatcher){
                     if(task.isSuccessful){
                         val entities = task.getResult()
                                 .filter { it.contains("power") and it.contains("name")}
-                                .mapIndexed { index,value ->
-                                    RankingEntity(value.data.get("name") as String,value.data.get("power") as Long,index)
+                                .map { value ->
+                                    RankingEntity(value.data.get("name") as String,value.data.get("power") as Long)
                                 }
                         dispatcher.dispatch(FirebaseAction.Ranking(entities))
                     } else {
@@ -24,6 +24,4 @@ class FirebaseActionCreator @Inject constructor(val dispatcher: Dispatcher){
                     }
                 }
     }
-
-    fun test() = dispatcher.dispatch(FirebaseAction.Test("test"))
 }

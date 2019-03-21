@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.battle_layout.*
 import voicebattle.com.shaya.voicebattle.MainActivity
 import voicebattle.com.shaya.voicebattle.R
+import voicebattle.com.shaya.voicebattle.Store
 import voicebattle.com.shaya.voicebattle.di.ActionCreatorModule
 import voicebattle.com.shaya.voicebattle.di.DaggerMeterComponent
 import voicebattle.com.shaya.voicebattle.di.DispatcherModule
@@ -15,7 +16,7 @@ import javax.inject.Inject
 
 class MeterFragment :Fragment(){
     @Inject
-    lateinit var audioStore: AudioStore
+    lateinit var audioStore: Store
     @Inject
     lateinit var audioController: AudioController
 

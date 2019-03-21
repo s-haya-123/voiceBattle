@@ -6,10 +6,11 @@ import android.view.SurfaceView
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import voicebattle.com.shaya.voicebattle.MainActivity
+import voicebattle.com.shaya.voicebattle.Store
 import kotlin.math.abs
 import kotlin.math.sin
 
-class MeterSurface(activity: MainActivity?, state: AudioStore) : SurfaceView(activity),SurfaceHolder.Callback{
+class MeterSurface(activity: MainActivity?, state: Store) : SurfaceView(activity),SurfaceHolder.Callback{
     val size:Point?
     var maxVolume:Int = 2000
     var beforeVolume:Int=0
