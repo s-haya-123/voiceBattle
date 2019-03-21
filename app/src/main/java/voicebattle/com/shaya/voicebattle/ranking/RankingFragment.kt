@@ -32,7 +32,7 @@ class RankingFlagment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         appComponent.inject(this)
-        store.entities.subscribe {
+        store.entitiesOrderByPower.subscribe {
             it.forEachIndexed { index, rankingEntity ->
                 val ranking_line = layoutInflater.inflate(R.layout.ranking_line,null).apply {
                     findViewById<TextView>(R.id.rank_text).text = (index+1).toString()
@@ -44,6 +44,7 @@ class RankingFlagment : Fragment() {
         }
 
         actionCreator.getRanking()
+        actionCreator.setRanking(RankingEntity("test",8000))
     }
 
     companion object {
