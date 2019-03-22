@@ -1,7 +1,6 @@
 package voicebattle.com.shaya.voicebattle
 
 import android.Manifest
-import android.animation.ValueAnimator
 import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -9,12 +8,8 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.content.ContextCompat
-import android.util.Log
-import kotlinx.android.synthetic.main.battle_layout.*
-import voicebattle.com.shaya.voicebattle.di.AudioActionCreatorModule
-import voicebattle.com.shaya.voicebattle.di.DaggerAppComponent
-import voicebattle.com.shaya.voicebattle.di.DispatcherModule
-import javax.inject.Inject
+import voicebattle.com.shaya.voicebattle.meter.MeterFragment
+import voicebattle.com.shaya.voicebattle.ranking.RankingFlagment
 
 
 class MainActivity : AppCompatActivity() {
@@ -29,7 +24,7 @@ class MainActivity : AppCompatActivity() {
             val fragmentManager:FragmentManager = this.supportFragmentManager
             val fragmentTransaction:FragmentTransaction = fragmentManager.beginTransaction()
 
-            fragmentTransaction.add(R.id.activity_main,MeterFragment.newInstance(),"ScheduleFlagment")
+            fragmentTransaction.add(R.id.activity_main, RankingFlagment.newInstance(),"ScheduleFlagment")
             fragmentTransaction.commit()
         }
 

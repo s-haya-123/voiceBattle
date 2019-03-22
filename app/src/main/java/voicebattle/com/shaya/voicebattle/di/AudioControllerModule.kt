@@ -2,10 +2,8 @@ package voicebattle.com.shaya.voicebattle.di
 
 import dagger.Module
 import dagger.Provides
-import voicebattle.com.shaya.voicebattle.AudioActionCreator
-import voicebattle.com.shaya.voicebattle.AudioController
-import voicebattle.com.shaya.voicebattle.Dispatcher
-import javax.inject.Singleton
+import voicebattle.com.shaya.voicebattle.meter.AudioActionCreator
+import voicebattle.com.shaya.voicebattle.meter.AudioController
 
 @Module
 class AudioControllerModule {
