@@ -44,7 +44,6 @@ class RankingFlagment : Fragment() {
         }
 
         actionCreator.getRanking()
-        actionCreator.setRanking(RankingEntity("test",8000))
     }
 
     companion object {

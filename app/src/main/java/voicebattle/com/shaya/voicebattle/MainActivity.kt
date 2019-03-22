@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v4.content.ContextCompat
 import voicebattle.com.shaya.voicebattle.meter.MeterFragment
 import voicebattle.com.shaya.voicebattle.ranking.RankingFlagment
+import voicebattle.com.shaya.voicebattle.submit.SubmitFragment
 
 
 class MainActivity : AppCompatActivity() {
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity() {
             val fragmentManager:FragmentManager = this.supportFragmentManager
             val fragmentTransaction:FragmentTransaction = fragmentManager.beginTransaction()
 
-            fragmentTransaction.add(R.id.activity_main, RankingFlagment.newInstance(),"ScheduleFlagment")
+            fragmentTransaction.add(R.id.activity_main, SubmitFragment.newInstance(),"ScheduleFlagment")
             fragmentTransaction.commit()
         }
 
