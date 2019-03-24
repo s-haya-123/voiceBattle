@@ -2,6 +2,7 @@ package voicebattle.com.shaya.voicebattle.ranking
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +27,21 @@ class RankingFlagment : Fragment() {
             .build()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.ranking,container,false)
+        return inflater.inflate(R.layout.ranking,container,false).apply {
+            isFocusableInTouchMode = true
+            requestFocus()
+            activity?.let {
+                setOnKeyListener { view, keyCode, keyEvent ->
+                    if (keyCode == KeyEvent.KEYCODE_BACK && keyEvent.getAction() == KeyEvent.ACTION_UP) {
+                        it.supportFragmentManager.beginTransaction().remove(this@RankingFlagment).commit()
+                        it.supportFragmentManager.popBackStack()
+                        true
+                    }
+                    false
+                }
+            }
+
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
