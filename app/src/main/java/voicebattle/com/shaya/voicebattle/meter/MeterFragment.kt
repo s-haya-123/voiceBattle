@@ -2,16 +2,23 @@ package voicebattle.com.shaya.voicebattle.meter
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentTransaction
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.battle_layout.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import voicebattle.com.shaya.voicebattle.MainActivity
 import voicebattle.com.shaya.voicebattle.R
 import voicebattle.com.shaya.voicebattle.Store
 import voicebattle.com.shaya.voicebattle.di.ActionCreatorModule
 import voicebattle.com.shaya.voicebattle.di.DaggerMeterComponent
 import voicebattle.com.shaya.voicebattle.di.DispatcherModule
+import voicebattle.com.shaya.voicebattle.ranking.RankingFlagment
+import voicebattle.com.shaya.voicebattle.submit.SubmitFragment
 import javax.inject.Inject
 
 class MeterFragment :Fragment(){
@@ -19,6 +26,7 @@ class MeterFragment :Fragment(){
     lateinit var audioStore: Store
     @Inject
     lateinit var audioController: AudioController
+    val compositeDisposable = CompositeDisposable()
 
     val appComponent = DaggerMeterComponent.builder()
             .actionCreatorModule(ActionCreatorModule())
@@ -40,11 +48,28 @@ class MeterFragment :Fragment(){
 
         calculate_start.setOnClickListener {
             audioController.startRecord()
+            GlobalScope.launch {
+                Thread.sleep(5000)
+                audioController.stopRecord()
+                activity?.let {
+                    val fragmentManager: FragmentManager = it.supportFragmentManager
+                    val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+                    fragmentTransaction.addToBackStack(null)
+                    fragmentTransaction.replace(R.id.activity_main, SubmitFragment.newInstance(battleValue.text.toString()))
+                    fragmentTransaction.commit()
+                }
+            }
         }
         audioStore.refreshValume.subscribe{
             battleValue.text = it.toString()
+        }.apply {
+            compositeDisposable.add(this)
         }
+    }
 
+    override fun onDestroyView() {
+        compositeDisposable.clear()
+        super.onDestroyView()
     }
     companion object {
         fun newInstance(): MeterFragment = MeterFragment()

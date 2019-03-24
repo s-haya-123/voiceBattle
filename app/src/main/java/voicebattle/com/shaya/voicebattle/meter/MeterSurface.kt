@@ -3,6 +3,7 @@ package voicebattle.com.shaya.voicebattle.meter
 import android.graphics.*
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import voicebattle.com.shaya.voicebattle.MainActivity
@@ -10,10 +11,11 @@ import voicebattle.com.shaya.voicebattle.Store
 import kotlin.math.abs
 import kotlin.math.sin
 
-class MeterSurface(activity: MainActivity?, state: Store) : SurfaceView(activity),SurfaceHolder.Callback{
+class MeterSurface(activity: MainActivity?, store: Store) : SurfaceView(activity),SurfaceHolder.Callback{
     val size:Point?
     var maxVolume:Int = 2000
     var beforeVolume:Int=0
+    val compositeDisposable = CompositeDisposable()
     init {
         super.getHolder().addCallback(this)
         size = activity?.windowManager?.defaultDisplay?.let {
@@ -21,17 +23,20 @@ class MeterSurface(activity: MainActivity?, state: Store) : SurfaceView(activity
                 it.getSize(this)
             }
         }
-        state.refreshValume.subscribe{volume->
+        store.refreshValume.subscribe{ volume->
             holder?.let {
                 drawMeter(it,volume,beforeVolume,10)
                 beforeVolume = volume
             }
+        }.apply {
+            compositeDisposable.add(this)
         }
     }
     override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
     }
 
     override fun surfaceDestroyed(p0: SurfaceHolder?) {
+        compositeDisposable.clear()
     }
 
     override fun surfaceCreated(holder: SurfaceHolder?) {

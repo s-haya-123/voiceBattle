@@ -10,4 +10,6 @@ class Store @Inject constructor(val dispatcher: Dispatcher) {
     val refreshValume = dispatcher
             .on(AudioAction.AudioValume::class.java)
             .map{it.volume}
+
+    val FirebaseState = dispatcher.on(FirebaseAction.SetRankingSucess::class.java)
 }
