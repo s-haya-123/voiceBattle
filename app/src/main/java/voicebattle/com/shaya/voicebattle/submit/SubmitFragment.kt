@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.ranking.*
 import kotlinx.android.synthetic.main.result_layout.*
 import voicebattle.com.shaya.voicebattle.Store
@@ -25,6 +27,8 @@ import javax.inject.Inject
 class SubmitFragment : Fragment() {
     @Inject lateinit var actionCreator:FirebaseActionCreator
     @Inject lateinit var store: Store
+    val compositeDisposable = CompositeDisposable()
+
 
     var appComponent = DaggerSubmitComponent.builder()
             .actionCreatorModule(ActionCreatorModule())
@@ -36,6 +40,11 @@ class SubmitFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        arguments?.let {
+            it.getString(SubmitFragment.KEY).let {
+                power_result.text = it
+            }
+        }
         appComponent.inject(this)
         submit.setOnClickListener {
             val power = power_result.text.toString().toLong()
@@ -44,7 +53,10 @@ class SubmitFragment : Fragment() {
         }
         store.FirebaseState.subscribe {
             moveRankingFragment()
+        }.apply {
+            compositeDisposable.add(this)
         }
+
     }
     private fun moveRankingFragment(){
         activity?.let {
@@ -56,7 +68,17 @@ class SubmitFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        compositeDisposable.clear()
+        super.onDestroyView()
+    }
+
     companion object {
-        fun newInstance()  = SubmitFragment()
+        val KEY = "POWER"
+        fun newInstance(power:String)  = SubmitFragment().apply {
+            arguments = Bundle().apply {
+                putString(KEY,power)
+            }
+        }
     }
 }

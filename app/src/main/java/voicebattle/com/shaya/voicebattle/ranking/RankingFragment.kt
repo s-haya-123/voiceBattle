@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.ranking.*
 import voicebattle.com.shaya.voicebattle.Store
 import voicebattle.com.shaya.voicebattle.R
@@ -20,6 +21,7 @@ class RankingFlagment : Fragment() {
     lateinit var actionCreator:FirebaseActionCreator
     @Inject
     lateinit var store: Store
+    val compositeDisposable = CompositeDisposable()
 
     var appComponent = DaggerRankingComponent.builder()
             .actionCreatorModule(ActionCreatorModule())
@@ -56,9 +58,16 @@ class RankingFlagment : Fragment() {
                 }
                 ranking_list.addView(ranking_line)
             }
+        }.apply {
+            compositeDisposable.add(this)
         }
 
         actionCreator.getRanking()
+    }
+
+    override fun onDestroyView() {
+        compositeDisposable.clear()
+        super.onDestroyView()
     }
 
     companion object {
