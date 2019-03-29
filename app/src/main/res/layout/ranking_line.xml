@@ -11,23 +11,26 @@
         <TextView
             android:id="@+id/rank_text"
             android:layout_width="4dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
+            android:layout_height="33dp"
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/name_text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
+            android:layout_height="33dp"
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/power_text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
+            android:layout_height="33dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/brank_ranking"
+            android:layout_width="3dp"
+            android:layout_height="33dp"
+            android:layout_weight="1" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

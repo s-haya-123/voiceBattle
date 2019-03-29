@@ -2,13 +2,12 @@ package voicebattle.com.shaya.voicebattle.ranking
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.KeyEvent
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.ranking.*
+import kotlinx.android.synthetic.main.ranking_line.*
+import kotlinx.android.synthetic.main.ranking_line.view.*
 import voicebattle.com.shaya.voicebattle.Store
 import voicebattle.com.shaya.voicebattle.R
 import voicebattle.com.shaya.voicebattle.di.ActionCreatorModule
@@ -46,18 +45,26 @@ class RankingFlagment : Fragment() {
         }
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         appComponent.inject(this)
         store.entitiesOrderByPower.subscribe {
             it.forEachIndexed { index, rankingEntity ->
-                val ranking_line = layoutInflater.inflate(R.layout.ranking_line,null).apply {
-                    findViewById<TextView>(R.id.rank_text).text = (index+1).toString()
+                layoutInflater.inflate(R.layout.ranking_line,null).apply {
+                    findViewById<TextView>(R.id.rank_text)?.apply {
+                        text = (index+1).toString()
+                        gravity = Gravity.LEFT
+                    }
                     findViewById<TextView>(R.id.name_text).text = rankingEntity.name
-                    findViewById<TextView>(R.id.power_text).text = rankingEntity.power.toString()
+                    findViewById<TextView>(R.id.power_text)?.apply {
+                        text = rankingEntity.power.toString()
+                        gravity = Gravity.RIGHT
+                    }
+                    ranking_list.addView(this)
                 }
-                ranking_list.addView(ranking_line)
             }
+
         }.apply {
             compositeDisposable.add(this)
         }
