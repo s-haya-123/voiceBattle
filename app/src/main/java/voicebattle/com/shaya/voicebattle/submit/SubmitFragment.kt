@@ -5,6 +5,7 @@ import android.support.annotation.IntegerRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,21 +50,22 @@ class SubmitFragment : Fragment() {
         submit.setOnClickListener {
             val power = power_result.text.toString().toLong()
             val name = ranking_name.text.toString()
-            actionCreator.setRanking(RankingEntity(name,power))
+            actionCreator.setRanking(RankingEntity(name,power,null))
         }
         store.FirebaseState.subscribe {
-            moveRankingFragment()
+            moveRankingFragment(it.id)
         }.apply {
             compositeDisposable.add(this)
         }
 
+
     }
-    private fun moveRankingFragment(){
+    private fun moveRankingFragment(id:String){
         activity?.let {
             val fragmentManager: FragmentManager = it.supportFragmentManager
             val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
             fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.replace(R.id.activity_main,RankingFlagment.newInstance())
+            fragmentTransaction.replace(R.id.activity_main,RankingFlagment.newInstance(id))
             fragmentTransaction.commit()
         }
     }

@@ -6,6 +6,9 @@ import com.google.firebase.firestore.Query
 import voicebattle.com.shaya.voicebattle.Dispatcher
 import java.util.*
 import javax.inject.Inject
+import com.google.firebase.firestore.DocumentReference
+
+
 
 class FirebaseActionCreator @Inject constructor(val dispatcher: Dispatcher){
     val COLLECTION_NAME = "ranking"
@@ -21,7 +24,7 @@ class FirebaseActionCreator @Inject constructor(val dispatcher: Dispatcher){
                         val entities = task.getResult()
                                 .filter { it.contains(RankingEntity.POWER) and it.contains(RankingEntity.NAME)}
                                 .map { value ->
-                                    RankingEntity(value.data.get(RankingEntity.NAME) as String,value.data.get(RankingEntity.POWER) as Long)
+                                    RankingEntity(value.data.get(RankingEntity.NAME) as String,value.data.get(RankingEntity.POWER) as Long,value.id)
                                 }
                         dispatcher.dispatch(FirebaseAction.Ranking(entities))
                     } else {
@@ -35,11 +38,10 @@ class FirebaseActionCreator @Inject constructor(val dispatcher: Dispatcher){
             put(RankingEntity.NAME,entity.name)
         }
         val db = FirebaseFirestore.getInstance()
-        db.collection(COLLECTION_NAME)
-                .document()
-                .set(data)
+        val newCityRef = db.collection(COLLECTION_NAME).document()
+        newCityRef.set(data)
                 .addOnSuccessListener {
-                    dispatcher.dispatch(FirebaseAction.SetRankingSucess())
+                    dispatcher.dispatch(FirebaseAction.SetRankingSucess(newCityRef.id))
                 }
                 .addOnFailureListener {
                     dispatcher.dispatch((FirebaseAction.SetRankingFailure()))

@@ -1,7 +1,9 @@
 package voicebattle.com.shaya.voicebattle.ranking
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.*
 import android.widget.TextView
 import io.reactivex.disposables.CompositeDisposable
@@ -13,6 +15,7 @@ import voicebattle.com.shaya.voicebattle.R
 import voicebattle.com.shaya.voicebattle.di.ActionCreatorModule
 import voicebattle.com.shaya.voicebattle.di.DaggerRankingComponent
 import voicebattle.com.shaya.voicebattle.di.DispatcherModule
+import voicebattle.com.shaya.voicebattle.submit.SubmitFragment
 import javax.inject.Inject
 
 class RankingFlagment : Fragment() {
@@ -21,6 +24,7 @@ class RankingFlagment : Fragment() {
     @Inject
     lateinit var store: Store
     val compositeDisposable = CompositeDisposable()
+    lateinit var id:String
 
     var appComponent = DaggerRankingComponent.builder()
             .actionCreatorModule(ActionCreatorModule())
@@ -48,10 +52,19 @@ class RankingFlagment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        arguments?.let {
+            it.getString(RankingFlagment.KEY)?.let {
+                id = it
+            }
+        }
         appComponent.inject(this)
         store.entitiesOrderByPower.subscribe {
             it.forEachIndexed { index, rankingEntity ->
                 layoutInflater.inflate(R.layout.ranking_line,null).apply {
+                    if( rankingEntity.id == this@RankingFlagment.id){
+                        setBackgroundColor(Color.CYAN)
+                        rank_number.text = "${index+1}位"
+                    }
                     findViewById<TextView>(R.id.rank_text)?.apply {
                         text = (index+1).toString()
                         gravity = Gravity.LEFT
@@ -61,6 +74,7 @@ class RankingFlagment : Fragment() {
                         text = rankingEntity.power.toString()
                         gravity = Gravity.RIGHT
                     }
+
                     ranking_list.addView(this)
                 }
             }
@@ -78,6 +92,12 @@ class RankingFlagment : Fragment() {
     }
 
     companion object {
-        fun newInstance()  = RankingFlagment()
+        val KEY="FIREBASE_ID"
+        fun newInstance(id:String)  = RankingFlagment().apply {
+            arguments = Bundle().apply {
+                putString(KEY,id)
+                Log.d("firebase",id)
+            }
+        }
     }
 }

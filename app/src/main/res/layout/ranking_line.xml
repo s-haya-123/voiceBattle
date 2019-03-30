@@ -28,7 +28,7 @@
 
         <TextView
             android:id="@+id/brank_ranking"
-            android:layout_width="3dp"
+            android:layout_width="1dp"
             android:layout_height="33dp"
             android:layout_weight="1" />
     </LinearLayout>
