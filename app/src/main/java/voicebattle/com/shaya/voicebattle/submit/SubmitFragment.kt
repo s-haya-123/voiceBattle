@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.Navigation
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.ranking.*
@@ -61,12 +62,11 @@ class SubmitFragment : Fragment() {
 
     }
     private fun moveRankingFragment(id:String){
-        activity?.let {
-            val fragmentManager: FragmentManager = it.supportFragmentManager
-            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.replace(R.id.activity_main,RankingFlagment.newInstance(id))
-            fragmentTransaction.commit()
+        view?.let {
+            val bundle = Bundle().apply {
+                putString(RankingFlagment.KEY,id)
+            }
+            Navigation.findNavController(it).navigate(R.id.rankingFlagment,bundle)
         }
     }
 
@@ -77,10 +77,5 @@ class SubmitFragment : Fragment() {
 
     companion object {
         val KEY = "POWER"
-        fun newInstance(power:String)  = SubmitFragment().apply {
-            arguments = Bundle().apply {
-                putString(KEY,power)
-            }
-        }
     }
 }

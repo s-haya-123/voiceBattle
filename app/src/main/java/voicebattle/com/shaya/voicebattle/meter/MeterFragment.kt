@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.battle_layout.*
 import kotlinx.coroutines.GlobalScope
@@ -46,16 +47,15 @@ class MeterFragment : Fragment(){
             }
         }
 
-        calculate_start.setOnClickListener {
+        calculate_start.setOnClickListener {view ->
             audioController.startRecord()
             GlobalScope.launch {
                 Thread.sleep(5000)
                 activity?.let {
-                    val fragmentManager: FragmentManager = it.supportFragmentManager
-                    val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-                    fragmentTransaction.addToBackStack(null)
-                    fragmentTransaction.replace(R.id.activity_main, SubmitFragment.newInstance(battleValue.text.toString()))
-                    fragmentTransaction.commit()
+                    val bundle = Bundle().apply {
+                        putString(SubmitFragment.KEY,battleValue.text.toString())
+                    }
+                    Navigation.findNavController(view).navigate(R.id.action_meterFragment_to_submitFragment,bundle)
                 }
             }
         }
@@ -71,7 +71,5 @@ class MeterFragment : Fragment(){
         compositeDisposable.clear()
         super.onDestroyView()
     }
-    companion object {
-        fun newInstance(): MeterFragment = MeterFragment()
-    }
+
 }

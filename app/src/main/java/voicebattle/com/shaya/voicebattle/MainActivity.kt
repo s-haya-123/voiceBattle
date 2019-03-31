@@ -18,17 +18,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         setPermission()
-
-        if(savedInstanceState == null){
-            val fragmentManager: FragmentManager = this.supportFragmentManager
-            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-
-            fragmentTransaction.add(R.id.activity_main, MeterFragment.newInstance(),"ScheduleFlagment")
-            fragmentTransaction.commit()
-        }
-
     }
     private fun setPermission(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {

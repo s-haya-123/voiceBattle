@@ -93,11 +93,5 @@ class RankingFlagment : Fragment() {
 
     companion object {
         val KEY="FIREBASE_ID"
-        fun newInstance(id:String)  = RankingFlagment().apply {
-            arguments = Bundle().apply {
-                putString(KEY,id)
-                Log.d("firebase",id)
-            }
-        }
     }
 }

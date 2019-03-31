@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/meterFragment">
+
+    <fragment
+        android:id="@+id/meterFragment"
+        android:name="voicebattle.com.shaya.voicebattle.meter.MeterFragment"
+        android:label="MeterFragment" >
+        <action
+            android:id="@+id/action_meterFragment_to_submitFragment"
+            app:destination="@id/submitFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/submitFragment"
+        android:name="voicebattle.com.shaya.voicebattle.submit.SubmitFragment"
+        android:label="SubmitFragment" >
+        <action
+            android:id="@+id/action_submitFragment_to_rankingFlagment"
+            app:destination="@id/rankingFlagment" />
+    </fragment>
+    <fragment
+        android:id="@+id/rankingFlagment"
+        android:name="voicebattle.com.shaya.voicebattle.ranking.RankingFlagment"
+        android:label="RankingFlagment" >
+        <action
+            android:id="@+id/action_rankingFlagment_to_meterFragment"
+            app:destination="@id/meterFragment" />
+        <argument
+            android:name="FIREBASE_ID"
+            app:argType="string" />
+    </fragment>
+</navigation>
