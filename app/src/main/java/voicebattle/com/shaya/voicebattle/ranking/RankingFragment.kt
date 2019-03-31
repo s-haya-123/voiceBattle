@@ -2,10 +2,11 @@ package voicebattle.com.shaya.voicebattle.ranking
 
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.util.Log
 import android.view.*
 import android.widget.TextView
+import androidx.navigation.Navigation
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.ranking.*
 import kotlinx.android.synthetic.main.ranking_line.*
@@ -38,8 +39,7 @@ class RankingFlagment : Fragment() {
             activity?.let {
                 setOnKeyListener { view, keyCode, keyEvent ->
                     if (keyCode == KeyEvent.KEYCODE_BACK && keyEvent.getAction() == KeyEvent.ACTION_UP) {
-                        it.supportFragmentManager.beginTransaction().remove(this@RankingFlagment).commit()
-                        it.supportFragmentManager.popBackStack()
+                        Navigation.findNavController(view).navigate(R.id.action_rankingFlagment_to_meterFragment)
                         true
                     }
                     false
@@ -93,11 +93,5 @@ class RankingFlagment : Fragment() {
 
     companion object {
         val KEY="FIREBASE_ID"
-        fun newInstance(id:String)  = RankingFlagment().apply {
-            arguments = Bundle().apply {
-                putString(KEY,id)
-                Log.d("firebase",id)
-            }
-        }
     }
 }

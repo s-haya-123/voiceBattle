@@ -1,15 +1,16 @@
 package voicebattle.com.shaya.voicebattle.submit
 
 import android.os.Bundle
-import android.support.annotation.IntegerRes
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentTransaction
+import androidx.annotation.IntegerRes
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.Navigation
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.ranking.*
@@ -61,12 +62,11 @@ class SubmitFragment : Fragment() {
 
     }
     private fun moveRankingFragment(id:String){
-        activity?.let {
-            val fragmentManager: FragmentManager = it.supportFragmentManager
-            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.replace(R.id.activity_main,RankingFlagment.newInstance(id))
-            fragmentTransaction.commit()
+        view?.let {
+            val bundle = Bundle().apply {
+                putString(RankingFlagment.KEY,id)
+            }
+            Navigation.findNavController(it).navigate(R.id.action_submitFragment_to_rankingFlagment,bundle)
         }
     }
 
@@ -77,10 +77,5 @@ class SubmitFragment : Fragment() {
 
     companion object {
         val KEY = "POWER"
-        fun newInstance(power:String)  = SubmitFragment().apply {
-            arguments = Bundle().apply {
-                putString(KEY,power)
-            }
-        }
     }
 }

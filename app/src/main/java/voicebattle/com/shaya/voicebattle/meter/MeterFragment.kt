@@ -1,12 +1,13 @@
 package voicebattle.com.shaya.voicebattle.meter
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentTransaction
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.battle_layout.*
 import kotlinx.coroutines.GlobalScope
@@ -21,7 +22,7 @@ import voicebattle.com.shaya.voicebattle.ranking.RankingFlagment
 import voicebattle.com.shaya.voicebattle.submit.SubmitFragment
 import javax.inject.Inject
 
-class MeterFragment :Fragment(){
+class MeterFragment : Fragment(){
     @Inject
     lateinit var audioStore: Store
     @Inject
@@ -46,17 +47,15 @@ class MeterFragment :Fragment(){
             }
         }
 
-        calculate_start.setOnClickListener {
+        calculate_start.setOnClickListener {view ->
             audioController.startRecord()
             GlobalScope.launch {
                 Thread.sleep(5000)
-                audioController.stopRecord()
                 activity?.let {
-                    val fragmentManager: FragmentManager = it.supportFragmentManager
-                    val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-                    fragmentTransaction.addToBackStack(null)
-                    fragmentTransaction.replace(R.id.activity_main, SubmitFragment.newInstance(battleValue.text.toString()))
-                    fragmentTransaction.commit()
+                    val bundle = Bundle().apply {
+                        putString(SubmitFragment.KEY,battleValue.text.toString())
+                    }
+                    Navigation.findNavController(view).navigate(R.id.action_meterFragment_to_submitFragment,bundle)
                 }
             }
         }
@@ -68,10 +67,9 @@ class MeterFragment :Fragment(){
     }
 
     override fun onDestroyView() {
+        audioController.stopRecord()
         compositeDisposable.clear()
         super.onDestroyView()
     }
-    companion object {
-        fun newInstance(): MeterFragment = MeterFragment()
-    }
+
 }
