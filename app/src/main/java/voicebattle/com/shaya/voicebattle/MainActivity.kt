@@ -2,12 +2,12 @@ package voicebattle.com.shaya.voicebattle
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentTransaction
-import android.support.v4.content.ContextCompat
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import androidx.core.content.ContextCompat
 import voicebattle.com.shaya.voicebattle.meter.MeterFragment
 import voicebattle.com.shaya.voicebattle.ranking.RankingFlagment
 import voicebattle.com.shaya.voicebattle.submit.SubmitFragment
@@ -22,8 +22,8 @@ class MainActivity : AppCompatActivity() {
         setPermission()
 
         if(savedInstanceState == null){
-            val fragmentManager:FragmentManager = this.supportFragmentManager
-            val fragmentTransaction:FragmentTransaction = fragmentManager.beginTransaction()
+            val fragmentManager: FragmentManager = this.supportFragmentManager
+            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
 
             fragmentTransaction.add(R.id.activity_main, MeterFragment.newInstance(),"ScheduleFlagment")
             fragmentTransaction.commit()

@@ -1,9 +1,9 @@
 package voicebattle.com.shaya.voicebattle.meter
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentTransaction
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +21,7 @@ import voicebattle.com.shaya.voicebattle.ranking.RankingFlagment
 import voicebattle.com.shaya.voicebattle.submit.SubmitFragment
 import javax.inject.Inject
 
-class MeterFragment :Fragment(){
+class MeterFragment : Fragment(){
     @Inject
     lateinit var audioStore: Store
     @Inject
@@ -50,7 +50,6 @@ class MeterFragment :Fragment(){
             audioController.startRecord()
             GlobalScope.launch {
                 Thread.sleep(5000)
-                audioController.stopRecord()
                 activity?.let {
                     val fragmentManager: FragmentManager = it.supportFragmentManager
                     val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
@@ -68,6 +67,7 @@ class MeterFragment :Fragment(){
     }
 
     override fun onDestroyView() {
+        audioController.stopRecord()
         compositeDisposable.clear()
         super.onDestroyView()
     }

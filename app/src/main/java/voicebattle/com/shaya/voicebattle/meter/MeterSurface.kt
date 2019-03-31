@@ -25,8 +25,9 @@ class MeterSurface(activity: MainActivity?, store: Store) : SurfaceView(activity
         }
         store.refreshValume.subscribe{ volume->
             holder?.let {
-                drawMeter(it,volume,beforeVolume,10)
-                beforeVolume = volume
+//                drawMeter(it,volume,beforeVolume,10)
+//                beforeVolume = volume
+                drawMeter(it,volume)
             }
         }.apply {
             compositeDisposable.add(this)
@@ -41,11 +42,31 @@ class MeterSurface(activity: MainActivity?, store: Store) : SurfaceView(activity
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
         holder?.let {
-                drawMeter(it,0,beforeVolume,10)
+//                drawMeter(it,0,beforeVolume,10)
+            drawMeter(it,0)
         }
     }
 
+    private fun drawMeter(holder: SurfaceHolder,volume: Int){
+        holder.lockCanvas()?.let {canvas ->
+            canvas.drawColor(Color.WHITE)
+            val strokeWidth = 150f
+            val paint = Paint().apply {
+                this.color = Color.GREEN
+                this.strokeWidth = strokeWidth
+                this.style = Paint.Style.STROKE
+            }
 
+            size?.let{
+                val r = decideMeterR(it,strokeWidth)
+                drawCircleOnCircleTrajectory(canvas,it,paint,r, (volume).toFloat() / maxVolume * 100)
+                drawCircleOnDisplayCenter(canvas,it,paint,r,(volume).toFloat() / maxVolume * 100)
+            }
+
+            holder.unlockCanvasAndPost(canvas)
+        }
+
+    }
     private fun drawMeter(holder: SurfaceHolder,volume:Int,beforeVolume:Int,speed:Int){
         GlobalScope.launch {
             (0..abs(volume-beforeVolume) step speed).forEach {
