@@ -11,7 +11,8 @@
         android:label="MeterFragment" >
         <action
             android:id="@+id/action_meterFragment_to_submitFragment"
-            app:destination="@id/submitFragment" />
+            app:destination="@id/submitFragment"
+            app:enterAnim="@anim/nav_default_enter_anim" />
     </fragment>
     <fragment
         android:id="@+id/submitFragment"
@@ -19,7 +20,8 @@
         android:label="SubmitFragment" >
         <action
             android:id="@+id/action_submitFragment_to_rankingFlagment"
-            app:destination="@id/rankingFlagment" />
+            app:destination="@id/rankingFlagment"
+            app:enterAnim="@anim/nav_default_enter_anim" />
         <action
             android:id="@+id/action_submitFragment_to_meterFragment"
             app:destination="@id/meterFragment"
@@ -36,6 +38,7 @@
         <action
             android:id="@+id/action_rankingFlagment_to_meterFragment"
             app:destination="@id/meterFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
             app:popUpTo="@id/meterFragment"
             app:popUpToInclusive="false" />
     </fragment>
