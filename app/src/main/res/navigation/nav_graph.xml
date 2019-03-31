@@ -20,16 +20,23 @@
         <action
             android:id="@+id/action_submitFragment_to_rankingFlagment"
             app:destination="@id/rankingFlagment" />
+        <action
+            android:id="@+id/action_submitFragment_to_meterFragment"
+            app:destination="@id/meterFragment"
+            app:popUpTo="@id/meterFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/rankingFlagment"
         android:name="voicebattle.com.shaya.voicebattle.ranking.RankingFlagment"
         android:label="RankingFlagment" >
-        <action
-            android:id="@+id/action_rankingFlagment_to_meterFragment"
-            app:destination="@id/meterFragment" />
         <argument
             android:name="FIREBASE_ID"
             app:argType="string" />
+        <action
+            android:id="@+id/action_rankingFlagment_to_meterFragment"
+            app:destination="@id/meterFragment"
+            app:popUpTo="@id/meterFragment"
+            app:popUpToInclusive="false" />
     </fragment>
 </navigation>

@@ -8,6 +8,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.core.content.ContextCompat
+import androidx.navigation.findNavController
 import voicebattle.com.shaya.voicebattle.meter.MeterFragment
 import voicebattle.com.shaya.voicebattle.ranking.RankingFlagment
 import voicebattle.com.shaya.voicebattle.submit.SubmitFragment
@@ -26,6 +27,7 @@ class MainActivity : AppCompatActivity() {
                     arrayOf(Manifest.permission.RECORD_AUDIO), 1)
         }
     }
+    override fun onSupportNavigateUp() = findNavController(R.id.submitFragment).navigateUp()
 
 
 }

@@ -66,7 +66,7 @@ class SubmitFragment : Fragment() {
             val bundle = Bundle().apply {
                 putString(RankingFlagment.KEY,id)
             }
-            Navigation.findNavController(it).navigate(R.id.rankingFlagment,bundle)
+            Navigation.findNavController(it).navigate(R.id.action_submitFragment_to_rankingFlagment,bundle)
         }
     }
 
