@@ -28,6 +28,7 @@ class MeterFragment : Fragment(){
     @Inject
     lateinit var audioController: AudioController
     val compositeDisposable = CompositeDisposable()
+    var value:Int = 0
 
     val appComponent = DaggerMeterComponent.builder()
             .actionCreatorModule(ActionCreatorModule())
@@ -53,14 +54,14 @@ class MeterFragment : Fragment(){
                 Thread.sleep(5000)
                 activity?.let {
                     val bundle = Bundle().apply {
-                        putString(SubmitFragment.KEY,battleValue.text.toString())
+                        putString(SubmitFragment.KEY,value.toString())
                     }
                     Navigation.findNavController(view).navigate(R.id.action_meterFragment_to_submitFragment,bundle)
                 }
             }
         }
         audioStore.refreshValume.subscribe{
-            battleValue.text = it.toString()
+            value = it
         }.apply {
             compositeDisposable.add(this)
         }
