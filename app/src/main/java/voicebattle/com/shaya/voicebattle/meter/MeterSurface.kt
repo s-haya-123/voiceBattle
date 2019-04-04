@@ -14,7 +14,6 @@ import kotlin.math.sin
 class MeterSurface(activity: MainActivity?, store: Store) : SurfaceView(activity),SurfaceHolder.Callback{
     val size:Point?
     var maxVolume:Int = 2000
-    var beforeVolume:Int=0
     val compositeDisposable = CompositeDisposable()
     init {
         super.getHolder().addCallback(this)
@@ -25,8 +24,6 @@ class MeterSurface(activity: MainActivity?, store: Store) : SurfaceView(activity
         }
         store.refreshValume.subscribe{ volume->
             holder?.let {
-//                drawMeter(it,volume,beforeVolume,10)
-//                beforeVolume = volume
                 drawMeter(it,volume)
             }
         }.apply {
@@ -42,7 +39,6 @@ class MeterSurface(activity: MainActivity?, store: Store) : SurfaceView(activity
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
         holder?.let {
-//                drawMeter(it,0,beforeVolume,10)
             drawMeter(it,0)
         }
     }
