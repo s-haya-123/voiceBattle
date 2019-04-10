@@ -4,11 +4,8 @@ import android.graphics.*
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import voicebattle.com.shaya.voicebattle.MainActivity
 import voicebattle.com.shaya.voicebattle.Store
-import kotlin.math.abs
 import kotlin.math.sin
 
 class MeterSurface(activity: MainActivity?, store: Store) : SurfaceView(activity),SurfaceHolder.Callback{
@@ -72,15 +69,19 @@ class MeterSurface(activity: MainActivity?, store: Store) : SurfaceView(activity
     }
 
     private fun drawCircleOnDisplayCenter(canvas: Canvas, displaySize: Point, paint: Paint, r:Float,percent:Float){
-        val centerX = (displaySize.x /2).toFloat()
-        val centerY = (displaySize.y/2).toFloat()
-        val rect = RectF(centerX-r,centerY-r,centerX+r,centerY+r)
+        val ( positionOfDrawX, positionOfDrawY ) = calcCirclePosition(displaySize)
+        val rect = RectF(positionOfDrawX-r,positionOfDrawY-r,positionOfDrawX+r,positionOfDrawY+r)
 
         canvas.drawArc(rect,180f,180f * percent /100,false,paint)
     }
+    private fun calcCirclePosition(displaySize: Point):Pair<Int,Int>{
+        val ( x, y ) = Pair(displaySize.x, displaySize.y)
+        return Pair(x/2,y/2)
+    }
 
-    private fun drawCircleOnCircleTrajectory(canvas: Canvas,point: Point,paint:Paint,r : Float, percent: Float){
-        val (x,y) = calcMetorPoint(percent,r,point.x/2.toFloat(),point.y/2.toFloat())
+    private fun drawCircleOnCircleTrajectory(canvas: Canvas, displaySize: Point, paint:Paint, r : Float, percent: Float){
+        val ( positionOfDrawX, positionOfDrawY ) = calcCirclePosition(displaySize)
+        val (x,y) = calcMetorPoint(percent,r,positionOfDrawX.toFloat(),positionOfDrawY.toFloat())
         canvas.drawCircle(x.toFloat(),y.toFloat(),10f,paint)
     }
     private fun calcMetorPoint(percent:Float,r:Float,originX:Float,originY: Float): Pair<Double, Double> {
