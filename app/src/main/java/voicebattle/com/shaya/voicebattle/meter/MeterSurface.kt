@@ -46,14 +46,13 @@ class MeterSurface(activity: MainActivity?, store: Store) : SurfaceView(activity
     private fun drawMeter(holder: SurfaceHolder,volume: Int){
         holder.lockCanvas()?.let {canvas ->
             canvas.drawColor(Color.WHITE)
-            val strokeWidth = 150f
-            val paint = Paint().apply {
-                this.color = Color.GREEN
-                this.strokeWidth = strokeWidth
-                this.style = Paint.Style.STROKE
-            }
-
             size?.let{
+                val strokeWidth = decideDetect(it)
+                val paint = Paint().apply {
+                    this.color = Color.GREEN
+                    this.strokeWidth = strokeWidth
+                    this.style = Paint.Style.STROKE
+                }
                 val r = decideMeterR(it,strokeWidth)
                 drawCircleOnCircleTrajectory(canvas,it,paint,r, (volume).toFloat() / maxVolume * 100)
                 drawCircleOnDisplayCenter(canvas,it,paint,r,(volume).toFloat() / maxVolume * 100)
@@ -61,33 +60,11 @@ class MeterSurface(activity: MainActivity?, store: Store) : SurfaceView(activity
 
             holder.unlockCanvasAndPost(canvas)
         }
-
     }
-    private fun drawMeter(holder: SurfaceHolder,volume:Int,beforeVolume:Int,speed:Int){
-        GlobalScope.launch {
-            (0..abs(volume-beforeVolume) step speed).forEach {
-                holder.lockCanvas().apply {
-                    val direction = if(volume > beforeVolume) 1 else -1
-                    drawMeterForEach(this,beforeVolume,it * direction)
-                    holder.unlockCanvasAndPost(this)
-                }
-            }
-        }
-    }
-    private fun drawMeterForEach(canvas: Canvas,volume: Int,deltaVolume:Int){
-        canvas.drawColor(Color.WHITE)
-        val strokeWidth = 150f
-        val paint = Paint().apply {
-            this.color = Color.GREEN
-            this.strokeWidth = strokeWidth
-            this.style = Paint.Style.STROKE
-        }
-
-        size?.let{
-            val r = decideMeterR(it,strokeWidth)
-            drawCircleOnCircleTrajectory(canvas,it,paint,r, (volume+deltaVolume).toFloat() / maxVolume * 100)
-            drawCircleOnDisplayCenter(canvas,it,paint,r,(volume+deltaVolume).toFloat() / maxVolume * 100)
-        }
+    private fun decideDetect(displaySize:Point):Float{
+        val ratio = 8
+        val ( x, y ) = Pair(displaySize.x, displaySize.y)
+        return if( x > y ) ( y / ratio ).toFloat() else ( x / ratio ).toFloat()
     }
     private fun decideMeterR(displaySize: Point,strokeWidth:Float):Float{
         val baseSize = if(displaySize.x > displaySize.y) displaySize.y else displaySize.x
