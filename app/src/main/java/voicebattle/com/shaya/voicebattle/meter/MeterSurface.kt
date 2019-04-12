@@ -40,6 +40,15 @@ class MeterSurface(activity: MainActivity?, store: Store) : SurfaceView(activity
         }
     }
 
+    private fun drawText(canvas: Canvas,displaySize: Point, volume: Int){
+        val paint = Paint().apply {
+            color = Color.BLACK
+            textSize = 100F
+        }
+        val ( x, y ) = Pair(displaySize.x, displaySize.y)
+        canvas.drawText(volume.toString(),x/2.toFloat(),y/4.toFloat(),paint)
+    }
+
     private fun drawMeter(holder: SurfaceHolder,volume: Int){
         holder.lockCanvas()?.let {canvas ->
             canvas.drawColor(Color.WHITE)
@@ -51,6 +60,7 @@ class MeterSurface(activity: MainActivity?, store: Store) : SurfaceView(activity
                     this.style = Paint.Style.STROKE
                 }
                 val r = decideMeterR(it,strokeWidth)
+                drawText(canvas,it,volume)
                 drawCircleOnCircleTrajectory(canvas,it,paint,r, (volume).toFloat() / maxVolume * 100)
                 drawCircleOnDisplayCenter(canvas,it,paint,r,(volume).toFloat() / maxVolume * 100)
             }
@@ -76,7 +86,7 @@ class MeterSurface(activity: MainActivity?, store: Store) : SurfaceView(activity
     }
     private fun calcCirclePosition(displaySize: Point):Pair<Int,Int>{
         val ( x, y ) = Pair(displaySize.x, displaySize.y)
-        return Pair(x/2,y/2)
+        return Pair(x/2,y*2/3)
     }
 
     private fun drawCircleOnCircleTrajectory(canvas: Canvas, displaySize: Point, paint:Paint, r : Float, percent: Float){
