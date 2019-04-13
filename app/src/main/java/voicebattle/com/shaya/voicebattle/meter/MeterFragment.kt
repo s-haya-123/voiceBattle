@@ -49,7 +49,7 @@ class MeterFragment : Fragment(){
                 Thread.sleep(TimeLimitMs)
                 activity?.let {
                     val bundle = Bundle().apply {
-                        putString(SubmitFragment.KEY,calcTotalValue(valueArray))
+                        putString(SubmitFragment.KEY,calcTotalValue(valueArray).toString())
                     }
                     Navigation.findNavController(view).navigate(R.id.action_meterFragment_to_submitFragment,bundle)
                 }
@@ -61,8 +61,8 @@ class MeterFragment : Fragment(){
             compositeDisposable.add(this)
         }
     }
-    private fun calcTotalValue(values:List<Int>):String{
-        return values.average().toString()
+    private fun calcTotalValue(values:List<Int>):Int{
+        return values.average().toInt()
     }
 
     override fun onDestroyView() {
