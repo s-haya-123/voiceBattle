@@ -29,6 +29,7 @@ class MeterFragment : Fragment(){
     lateinit var audioController: AudioController
     val compositeDisposable = CompositeDisposable()
     var value:Int = 0
+    val TimeLimitMs:Long = 5000
 
     val appComponent = DaggerMeterComponent.builder()
             .actionCreatorModule(ActionCreatorModule())
@@ -37,21 +38,18 @@ class MeterFragment : Fragment(){
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.battle_layout,container,false)
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         appComponent.inject(this)
-
         if(activity is MainActivity){
             MeterSurface(activity as MainActivity, audioStore).apply {
                 mainLayout.addView(this)
             }
         }
-
         calculate_start.setOnClickListener {view ->
             audioController.startRecord()
             GlobalScope.launch {
-                Thread.sleep(5000)
+                Thread.sleep(TimeLimitMs)
                 activity?.let {
                     val bundle = Bundle().apply {
                         putString(SubmitFragment.KEY,value.toString())
