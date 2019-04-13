@@ -1,8 +1,10 @@
 package voicebattle.com.shaya.voicebattle.submit
 
 import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -44,6 +46,11 @@ class SubmitFragment : Fragment() {
                     addUpdateListener {
                         power_result.text = it.getAnimatedValue().toString()
                     }
+                    addListener(object:AnimatorListenerAdapter(){
+                        override fun onAnimationEnd(animation: Animator?) {
+                            power_result.setTextColor(Color.RED)
+                        }
+                    })
                     start()
                 }
             }
