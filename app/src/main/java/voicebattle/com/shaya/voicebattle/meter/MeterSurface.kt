@@ -10,7 +10,7 @@ import kotlin.math.sin
 
 class MeterSurface(activity: MainActivity?, store: Store) : SurfaceView(activity),SurfaceHolder.Callback{
     val size:Point?
-    var maxVolume:Int = 2000
+    var maxVolume:Int = 4000
     val compositeDisposable = CompositeDisposable()
     init {
         super.getHolder().addCallback(this)
@@ -41,12 +41,22 @@ class MeterSurface(activity: MainActivity?, store: Store) : SurfaceView(activity
     }
 
     private fun drawText(canvas: Canvas,displaySize: Point, volume: Int){
+        val ( x, y ) = Pair(displaySize.x, displaySize.y)
         val paint = Paint().apply {
             color = Color.BLACK
-            textSize = 100F
+            textSize = decideFontSize(x,y)
         }
-        val ( x, y ) = Pair(displaySize.x, displaySize.y)
-        canvas.drawText(volume.toString(),x/2.toFloat(),y/4.toFloat(),paint)
+        val textXPosition = x/2f - (paint.textSize * volume.toString().length ) /4f
+        canvas.drawText(volume.toString(),textXPosition ,y/4f,paint)
+    }
+
+    private fun decideFontSize(x:Int, y:Int):Float{
+        val ratio = 5f
+        if(x > y){
+            return y / ratio
+        } else {
+            return x / ratio
+        }
     }
 
     private fun drawMeter(holder: SurfaceHolder,volume: Int){
