@@ -1,24 +1,21 @@
 package voicebattle.com.shaya.voicebattle.submit
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
+import android.graphics.Color
 import android.os.Bundle
-import androidx.annotation.IntegerRes
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.navigation.Navigation
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import kotlinx.android.synthetic.main.ranking.*
-import kotlinx.android.synthetic.main.result_layout.*
+import kotlinx.android.synthetic.main.submit_layout.*
 import voicebattle.com.shaya.voicebattle.Store
 import voicebattle.com.shaya.voicebattle.R
 import voicebattle.com.shaya.voicebattle.di.ActionCreatorModule
-import voicebattle.com.shaya.voicebattle.di.DaggerRankingComponent
 import voicebattle.com.shaya.voicebattle.di.DaggerSubmitComponent
 import voicebattle.com.shaya.voicebattle.di.DispatcherModule
 import voicebattle.com.shaya.voicebattle.ranking.FirebaseActionCreator
@@ -37,14 +34,25 @@ class SubmitFragment : Fragment() {
             .dispatcherModule(DispatcherModule())
             .build()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.result_layout,container,false)
+        return inflater.inflate(R.layout.submit_layout,container,false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
             it.getString(SubmitFragment.KEY).let {
-                power_result.text = it
+                ValueAnimator.ofInt(0,it.toInt()).apply {
+                    duration = 1000
+                    addUpdateListener {
+                        power_result.text = it.getAnimatedValue().toString()
+                    }
+                    addListener(object:AnimatorListenerAdapter(){
+                        override fun onAnimationEnd(animation: Animator?) {
+                            power_result.setTextColor(Color.RED)
+                        }
+                    })
+                    start()
+                }
             }
         }
         appComponent.inject(this)
@@ -58,7 +66,6 @@ class SubmitFragment : Fragment() {
         }.apply {
             compositeDisposable.add(this)
         }
-
 
     }
     private fun moveRankingFragment(id:String){
