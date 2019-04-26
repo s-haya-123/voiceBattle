@@ -22,11 +22,16 @@ class FirebaseActionCreator @Inject constructor(val dispatcher: Dispatcher){
                 .addOnCompleteListener {task ->
                     if(task.isSuccessful){
                         val entities = task.getResult()
-                                .filter { it.contains(RankingEntity.POWER) and it.contains(RankingEntity.NAME)}
-                                .map { value ->
+                                ?.filter { it.contains(RankingEntity.POWER) and it.contains(RankingEntity.NAME)}
+                                ?.map { value ->
                                     RankingEntity(value.data.get(RankingEntity.NAME) as String,value.data.get(RankingEntity.POWER) as Long,value.id)
                                 }
-                        dispatcher.dispatch(FirebaseAction.Ranking(entities))
+                        if(entities != null) {
+                            dispatcher.dispatch(FirebaseAction.Ranking(entities))
+                        } else {
+                            Log.d("fbLog",task.exception.toString())
+                        }
+
                     } else {
                         Log.d("fbLog",task.exception.toString())
                     }
