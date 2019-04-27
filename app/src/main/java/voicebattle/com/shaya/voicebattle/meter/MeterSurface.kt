@@ -45,7 +45,7 @@ class MeterSurface(activity: MainActivity?, val store: Store) : SurfaceView(acti
     fun drawLimittime( canvas: Canvas ,percent: Float, displaySize: Point){
         val ( x, y ) = Pair(displaySize.x, displaySize.y)
         val paint = Paint().apply {
-            color = Color.BLACK
+            color = if(percent > 30) Color.YELLOW else Color.RED
         }
         canvas.drawRect(0f,100f,(percent/ 100f) * x,300f,paint)
     }
