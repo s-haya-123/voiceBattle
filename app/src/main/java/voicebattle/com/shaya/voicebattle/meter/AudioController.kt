@@ -3,25 +3,28 @@ package voicebattle.com.shaya.voicebattle.meter
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
+import android.util.Log
 import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.max
 
 class AudioController @Inject constructor(private val audioActionCreator: AudioActionCreator) {
-    val audioRecord: AudioRecord
+    var audioRecord: AudioRecord?
     val oneFrameDataCount:Int
     val shortData:ShortArray
-
+    val bufSize:Int
+    val SAMPLING_RATE = 44100
 
     init {
-        val SAMPLING_RATE = 44100
-        val bufSize = max(1 * 10,AudioRecord.getMinBufferSize(SAMPLING_RATE,
+        bufSize = max(1 * 10,AudioRecord.getMinBufferSize(SAMPLING_RATE,
                 AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT))
         oneFrameDataCount = bufSize/2
         shortData = ShortArray(oneFrameDataCount)
-
-
+        audioRecord = null
+        initAudioRecord()
+    }
+    fun initAudioRecord(){
         audioRecord = AudioRecord(MediaRecorder.AudioSource.MIC,
                 SAMPLING_RATE,
                 AudioFormat.CHANNEL_IN_MONO,
@@ -58,12 +61,13 @@ class AudioController @Inject constructor(private val audioActionCreator: AudioA
         }
     }
     fun startRecord(){
-        audioRecord.startRecording()
-        audioRecord.read(shortData, 0, oneFrameDataCount)
+        if(audioRecord?.state == AudioRecord.STATE_UNINITIALIZED){
+            initAudioRecord()
+        }
+        audioRecord?.startRecording()
+        audioRecord?.read(shortData, 0, oneFrameDataCount)
     }
     fun stopRecord(){
-        audioRecord.stop()
+        audioRecord?.stop()
     }
-
-
 }
