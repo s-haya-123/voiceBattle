@@ -1,6 +1,7 @@
 package voicebattle.com.shaya.voicebattle.meter
 
 import android.graphics.*
+import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import io.reactivex.disposables.CompositeDisposable
@@ -8,7 +9,7 @@ import voicebattle.com.shaya.voicebattle.MainActivity
 import voicebattle.com.shaya.voicebattle.Store
 import kotlin.math.sin
 
-class MeterSurface(activity: MainActivity?, store: Store) : SurfaceView(activity),SurfaceHolder.Callback{
+class MeterSurface(activity: MainActivity?, val store: Store) : SurfaceView(activity),SurfaceHolder.Callback{
     val size:Point?
     var maxVolume:Int = 4000
     val compositeDisposable = CompositeDisposable()
@@ -26,6 +27,8 @@ class MeterSurface(activity: MainActivity?, store: Store) : SurfaceView(activity
         }.apply {
             compositeDisposable.add(this)
         }
+
+
     }
     override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
     }
@@ -38,6 +41,13 @@ class MeterSurface(activity: MainActivity?, store: Store) : SurfaceView(activity
         holder?.let {
             drawMeter(it,0)
         }
+    }
+    fun drawLimittime( canvas: Canvas ,percent: Float, displaySize: Point){
+        val ( x, y ) = Pair(displaySize.x, displaySize.y)
+        val paint = Paint().apply {
+            color = Color.BLACK
+        }
+        canvas.drawRect(0f,100f,(percent/ 100f) * x,300f,paint)
     }
 
     private fun drawText(canvas: Canvas,displaySize: Point, volume: Int){
@@ -73,6 +83,7 @@ class MeterSurface(activity: MainActivity?, store: Store) : SurfaceView(activity
                 drawText(canvas,it,volume)
                 drawCircleOnCircleTrajectory(canvas,it,paint,r, (volume).toFloat() / maxVolume * 100)
                 drawCircleOnDisplayCenter(canvas,it,paint,r,(volume).toFloat() / maxVolume * 100)
+                drawLimittime(canvas,store.remainingTimePercent,it)
             }
 
             holder.unlockCanvasAndPost(canvas)

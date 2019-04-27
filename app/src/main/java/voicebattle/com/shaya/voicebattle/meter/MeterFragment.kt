@@ -1,6 +1,7 @@
 package voicebattle.com.shaya.voicebattle.meter
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,9 +25,12 @@ class MeterFragment : Fragment(){
     lateinit var audioStore: Store
     @Inject
     lateinit var audioController: AudioController
+    @Inject
+    lateinit var audioActionCreator: AudioActionCreator
     val compositeDisposable = CompositeDisposable()
     var valueArray:MutableList<Int> = mutableListOf<Int>()
-    val TimeLimitMs:Long = 5000
+    val TimeLimitCount = 1000
+    val intervalMs:Long = 5
 
     val appComponent = DaggerMeterComponent.builder()
             .actionCreatorModule(ActionCreatorModule())
@@ -46,7 +50,11 @@ class MeterFragment : Fragment(){
         calculate_start.setOnClickListener {view ->
             audioController.startRecord()
             GlobalScope.launch {
-                Thread.sleep(TimeLimitMs)
+                (0..TimeLimitCount).forEach {
+                    Log.d("test",(( it / TimeLimitCount.toFloat())).toString())
+                    audioActionCreator.updateRemainingTime((1 - it / TimeLimitCount.toFloat()) * 100)
+                    Thread.sleep(intervalMs)
+                }
                 activity?.let {
                     val bundle = Bundle().apply {
                         putString(SubmitFragment.KEY,calcTotalValue(valueArray).toString())
