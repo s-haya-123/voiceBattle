@@ -6,6 +6,7 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import io.reactivex.disposables.CompositeDisposable
 import voicebattle.com.shaya.voicebattle.MainActivity
+import voicebattle.com.shaya.voicebattle.R
 import voicebattle.com.shaya.voicebattle.Store
 import kotlin.math.sin
 
@@ -38,9 +39,21 @@ class MeterSurface(activity: MainActivity?, val store: Store) : SurfaceView(acti
     }
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
-        holder?.let {
-            drawMeter(it,0)
+        holder?.let {holder ->
+            size?.let { size ->
+                drawOpeningPicture(holder,size)
+            }
         }
+    }
+    fun drawOpeningPicture(holder: SurfaceHolder, displaySize: Point){
+        val ( x, y ) = Pair(displaySize.x, displaySize.y)
+        val canvas = holder.lockCanvas()
+        val bmp = BitmapFactory.decodeResource(resources,R.drawable.op)
+        val resizeBmp = Bitmap.createScaledBitmap(bmp, x, y,false)
+
+        canvas.drawBitmap(resizeBmp,0f,0f,null)
+        holder.unlockCanvasAndPost(canvas)
+
     }
     fun drawLimittime( canvas: Canvas ,percent: Float, displaySize: Point){
         val ( x, y ) = Pair(displaySize.x, displaySize.y)
