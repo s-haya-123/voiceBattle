@@ -12,7 +12,7 @@ import kotlin.math.sin
 
 class MeterSurface(activity: MainActivity?, val store: Store) : SurfaceView(activity),SurfaceHolder.Callback{
     val size:Point?
-    var maxVolume:Int = 4000
+    var maxVolume:Int = 40000
     val compositeDisposable = CompositeDisposable()
     init {
         super.getHolder().addCallback(this)

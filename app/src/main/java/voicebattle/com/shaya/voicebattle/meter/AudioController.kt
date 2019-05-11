@@ -14,6 +14,7 @@ class AudioController @Inject constructor(private val audioActionCreator: AudioA
     val shortData:ShortArray
     val bufSize:Int
     val SAMPLING_RATE = 44100
+    val audioVolumeScale = 10
 
     init {
         bufSize = max(1 * 10,AudioRecord.getMinBufferSize(SAMPLING_RATE,
@@ -40,7 +41,7 @@ class AudioController @Inject constructor(private val audioActionCreator: AudioA
                     System.arraycopy(shortData,0,playShortData,cnt * oneFrameDataCount,oneFrameDataCount)
                     if(loopCnt == cnt ){
                         val avarageVolume = playShortData.map { abs(it.toFloat()) }.average().toInt()
-                        audioActionCreator.updateMicVolume(avarageVolume)
+                        audioActionCreator.updateMicVolume(avarageVolume * audioVolumeScale)
                         playShortData = initPlayShortData(oneFrameDataCount,loopCnt)
                         cnt = 0
                     } else {
