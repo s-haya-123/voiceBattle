@@ -52,6 +52,7 @@ class MeterSurface(activity: MainActivity?, val store: Store) : SurfaceView(acti
         val resizeBmp = Bitmap.createScaledBitmap(bmp, x, y,false)
 
         canvas.drawBitmap(resizeBmp,0f,0f,null)
+        drawOpeningText(canvas, displaySize, "大声を出せ！")
         holder.unlockCanvasAndPost(canvas)
 
     }
@@ -65,12 +66,27 @@ class MeterSurface(activity: MainActivity?, val store: Store) : SurfaceView(acti
 
     private fun drawText(canvas: Canvas,displaySize: Point, volume: Int){
         val ( x, y ) = Pair(displaySize.x, displaySize.y)
-        val paint = Paint().apply {
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = Color.BLACK
             textSize = decideFontSize(x,y)
         }
         val textXPosition = x/2f - (paint.textSize * volume.toString().length ) /4f
         canvas.drawText(volume.toString(),textXPosition ,y/4f,paint)
+    }
+    private fun drawOpeningText(canvas: Canvas,displaySize: Point, text: String){
+        val ( x, y ) = Pair(displaySize.x, displaySize.y)
+        val paint = Paint().apply {
+            color = Color.BLACK
+            textSize = decideFontSize(x,y) * 0.7f
+        }
+        val backgroundPaint = Paint().apply {
+            color = Color.WHITE
+        }
+        val textXPosition = x/2f - (paint.textSize * text.length ) /2f + 50
+
+        val rect = RectF(textXPosition,y/6f,paint.textSize * (text.length-2) *2,paint.textSize)
+        canvas.drawRect(rect,backgroundPaint)
+        canvas.drawText(text, textXPosition,y/6f,paint)
     }
 
     private fun decideFontSize(x:Int, y:Int):Float{
