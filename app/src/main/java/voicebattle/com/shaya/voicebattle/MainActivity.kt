@@ -24,11 +24,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setPermission()
+        MobileAds.initialize(this, "ca-app-pub-1457109199282503~500800955")
         val adRequest = AdRequest.Builder().build()
         adView.loadAd(adRequest)
     }
     private fun setPermission(){
-        MobileAds.initialize(this, "ca-app-pub-3940256099942544/6300978111")
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     arrayOf(Manifest.permission.RECORD_AUDIO), 1)
