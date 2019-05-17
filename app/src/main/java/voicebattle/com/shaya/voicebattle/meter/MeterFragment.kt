@@ -49,6 +49,7 @@ class MeterFragment : Fragment(){
         }
         calculate_start.setOnClickListener {view ->
             audioController.startRecord()
+            view.visibility = View.INVISIBLE
             GlobalScope.launch {
                 (0..TimeLimitCount).forEach {
                     Log.d("test",(( it / TimeLimitCount.toFloat())).toString())
