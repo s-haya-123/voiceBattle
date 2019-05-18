@@ -52,7 +52,7 @@ class MeterSurface(activity: MainActivity?, val store: Store) : SurfaceView(acti
         val resizeBmp = Bitmap.createScaledBitmap(bmp, x, y,false)
 
         canvas.drawBitmap(resizeBmp,0f,0f,null)
-        drawOpeningText(canvas, displaySize, "大声を出せ！")
+        drawOpeningText(canvas, displaySize, "声でバトル！")
         holder.unlockCanvasAndPost(canvas)
 
     }
@@ -80,13 +80,13 @@ class MeterSurface(activity: MainActivity?, val store: Store) : SurfaceView(acti
             textSize = decideFontSize(x,y) * 0.7f
         }
         val backgroundPaint = Paint().apply {
-            color = Color.WHITE
+            color = Color.argb(200,255,255,255)
         }
         val textXPosition = x/2f - (paint.textSize * text.length ) /2f + 50
 
-        val rect = RectF(textXPosition,y/6f,paint.textSize * (text.length-2) *2,paint.textSize)
+        val rect = RectF(textXPosition,y/4f - paint.textSize,paint.textSize * (text.length +1),y/4f)
         canvas.drawRect(rect,backgroundPaint)
-        canvas.drawText(text, textXPosition,y/6f,paint)
+        canvas.drawText(text, textXPosition,y/4f,paint)
     }
 
     private fun decideFontSize(x:Int, y:Int):Float{
