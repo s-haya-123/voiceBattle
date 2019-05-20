@@ -12,13 +12,22 @@ import kotlin.math.sin
 class MeterSurface(activity: MainActivity?, val store: Store) : SurfaceView(activity),SurfaceHolder.Callback{
     val size:Point?
     var maxVolume:Int = 40000
+    val top: Int?
     val compositeDisposable = CompositeDisposable()
     init {
         super.getHolder().addCallback(this)
-        size = activity?.windowManager?.defaultDisplay?.let {
-            Point().apply {
-                it.getSize(this)
+        if(activity != null) {
+            size = activity.windowManager.defaultDisplay.let {
+                Point().apply {
+                    it.getSize(this)
+                }
             }
+            top = activity.window.decorView.let {
+                Rect().apply { it.getWindowVisibleDisplayFrame(this) }.top
+            }
+        } else {
+            size = null
+            top = null
         }
         store.refreshValume.subscribe{ volume->
             holder?.let {
@@ -50,7 +59,9 @@ class MeterSurface(activity: MainActivity?, val store: Store) : SurfaceView(acti
         val bmp = BitmapFactory.decodeResource(resources,R.drawable.op)
         val resizeBmp = Bitmap.createScaledBitmap(bmp, x, y,false)
 
-        canvas.drawBitmap(resizeBmp,0f,0f,null)
+        top?.let {
+            canvas.drawBitmap(resizeBmp,0f,it.toFloat(),null)
+        }
         drawOpeningText(canvas, displaySize, "声でバトル！","-大声をだせ！！-")
         holder.unlockCanvasAndPost(canvas)
 
