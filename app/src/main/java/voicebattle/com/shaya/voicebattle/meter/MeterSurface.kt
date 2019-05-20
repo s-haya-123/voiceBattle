@@ -1,7 +1,6 @@
 package voicebattle.com.shaya.voicebattle.meter
 
 import android.graphics.*
-import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import io.reactivex.disposables.CompositeDisposable
@@ -52,7 +51,7 @@ class MeterSurface(activity: MainActivity?, val store: Store) : SurfaceView(acti
         val resizeBmp = Bitmap.createScaledBitmap(bmp, x, y,false)
 
         canvas.drawBitmap(resizeBmp,0f,0f,null)
-        drawOpeningText(canvas, displaySize, "声でバトル！")
+        drawOpeningText(canvas, displaySize, "声でバトル！","-大声をだせ！！-")
         holder.unlockCanvasAndPost(canvas)
 
     }
@@ -73,20 +72,26 @@ class MeterSurface(activity: MainActivity?, val store: Store) : SurfaceView(acti
         val textXPosition = x/2f - (paint.textSize * volume.toString().length ) /4f
         canvas.drawText(volume.toString(),textXPosition ,y/4f,paint)
     }
-    private fun drawOpeningText(canvas: Canvas,displaySize: Point, text: String){
+    private fun drawOpeningText(canvas: Canvas,displaySize: Point, text: String, subText: String){
         val ( x, y ) = Pair(displaySize.x, displaySize.y)
         val paint = Paint().apply {
             color = Color.BLACK
             textSize = decideFontSize(x,y) * 0.7f
         }
+        val subTextPaint = Paint().apply {
+            color = Color.BLACK
+            textSize = decideFontSize(x,y) * 0.4f
+        }
         val backgroundPaint = Paint().apply {
-            color = Color.argb(200,255,255,255)
+            color = Color.argb(180,255,255,255)
         }
         val textXPosition = x/2f - (paint.textSize * text.length ) /2f + 50
+        val subTextXPosition = x/2f - (subTextPaint.textSize * subText.length ) /2f + 50
 
-        val rect = RectF(textXPosition,y/4f - paint.textSize,paint.textSize * (text.length +1),y/4f)
+        val rect = RectF(0f,y/4f - paint.textSize, displaySize.x .toFloat(),y/4f * 1.1f + subTextPaint.textSize * 1.1f)
         canvas.drawRect(rect,backgroundPaint)
         canvas.drawText(text, textXPosition,y/4f,paint)
+        canvas.drawText(subText, subTextXPosition,y/4f * 1.3f,subTextPaint)
     }
 
     private fun decideFontSize(x:Int, y:Int):Float{

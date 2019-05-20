@@ -3,23 +3,20 @@ package voicebattle.com.shaya.voicebattle.ranking
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.util.Log
 import android.view.*
 import android.widget.TextView
+import androidx.fragment.app.DialogFragment
 import androidx.navigation.Navigation
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.ranking.*
-import kotlinx.android.synthetic.main.ranking_line.*
-import kotlinx.android.synthetic.main.ranking_line.view.*
 import voicebattle.com.shaya.voicebattle.Store
 import voicebattle.com.shaya.voicebattle.R
 import voicebattle.com.shaya.voicebattle.di.ActionCreatorModule
 import voicebattle.com.shaya.voicebattle.di.DaggerRankingComponent
 import voicebattle.com.shaya.voicebattle.di.DispatcherModule
-import voicebattle.com.shaya.voicebattle.submit.SubmitFragment
 import javax.inject.Inject
 
-class RankingFlagment : Fragment() {
+class RankingFlagment :  Fragment() {
     @Inject
     lateinit var actionCreator:FirebaseActionCreator
     @Inject
@@ -78,11 +75,9 @@ class RankingFlagment : Fragment() {
                     ranking_list.addView(this)
                 }
             }
-
         }.apply {
             compositeDisposable.add(this)
         }
-
         actionCreator.getRanking()
     }
 

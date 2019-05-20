@@ -1,12 +1,9 @@
 package voicebattle.com.shaya.voicebattle.ranking
 
-import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import voicebattle.com.shaya.voicebattle.Dispatcher
-import java.util.*
 import javax.inject.Inject
-import com.google.firebase.firestore.DocumentReference
 
 
 
@@ -29,11 +26,11 @@ class FirebaseActionCreator @Inject constructor(val dispatcher: Dispatcher){
                         if(entities != null) {
                             dispatcher.dispatch(FirebaseAction.Ranking(entities))
                         } else {
-                            Log.d("fbLog",task.exception.toString())
+                            dispatcher.dispatch((FirebaseAction.SetRankingFailure()))
                         }
 
                     } else {
-                        Log.d("fbLog",task.exception.toString())
+                        dispatcher.dispatch((FirebaseAction.SetRankingFailure()))
                     }
                 }
     }
@@ -43,10 +40,10 @@ class FirebaseActionCreator @Inject constructor(val dispatcher: Dispatcher){
             put(RankingEntity.NAME,entity.name)
         }
         val db = FirebaseFirestore.getInstance()
-        val newCityRef = db.collection(COLLECTION_NAME).document()
-        newCityRef.set(data)
+        val collection = db.collection(COLLECTION_NAME).document()
+        collection.set(data)
                 .addOnSuccessListener {
-                    dispatcher.dispatch(FirebaseAction.SetRankingSucess(newCityRef.id))
+                    dispatcher.dispatch(FirebaseAction.SetRankingSucess(collection.id))
                 }
                 .addOnFailureListener {
                     dispatcher.dispatch((FirebaseAction.SetRankingFailure()))
