@@ -2,12 +2,9 @@ package voicebattle.com.shaya.voicebattle.submit
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
-import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -71,7 +68,6 @@ class SubmitFragment : Fragment() {
 
         store.FirebaseFailure.subscribe{
             fragmentManager?.let {
-                Log.d("failer","fail!!")
                 FailedDialog().show(it, "")
             }
         } .apply {

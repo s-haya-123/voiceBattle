@@ -1,7 +1,6 @@
 package voicebattle.com.shaya.voicebattle.meter
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -52,7 +51,6 @@ class MeterFragment : Fragment(){
             view.visibility = View.INVISIBLE
             GlobalScope.launch {
                 (0..TimeLimitCount).forEach {
-                    Log.d("test",(( it / TimeLimitCount.toFloat())).toString())
                     audioActionCreator.updateRemainingTime((1 - it / TimeLimitCount.toFloat()) * 100)
                     Thread.sleep(intervalMs)
                 }
