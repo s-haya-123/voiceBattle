@@ -23,8 +23,10 @@ class MeterSurface(activity: MainActivity?, val store: Store) : SurfaceView(acti
                 }
             }
             top = activity.window.decorView.let {
-                Rect().apply { it.getWindowVisibleDisplayFrame(this) }.top
-            }
+                Rect().apply {
+                    it.getWindowVisibleDisplayFrame(this)
+                }
+            }.top
         } else {
             size = null
             top = null
@@ -36,10 +38,15 @@ class MeterSurface(activity: MainActivity?, val store: Store) : SurfaceView(acti
         }.apply {
             compositeDisposable.add(this)
         }
-
-
     }
     override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
+        store.refreshValume.subscribe{ volume->
+            holder?.let {
+                drawMeter(it,volume)
+            }
+        }.apply {
+            compositeDisposable.add(this)
+        }
     }
 
     override fun surfaceDestroyed(p0: SurfaceHolder?) {
@@ -57,14 +64,13 @@ class MeterSurface(activity: MainActivity?, val store: Store) : SurfaceView(acti
         val ( x, y ) = Pair(displaySize.x, displaySize.y)
         val canvas = holder.lockCanvas()
         val bmp = BitmapFactory.decodeResource(resources,R.drawable.op)
-        val resizeBmp = Bitmap.createScaledBitmap(bmp, x, y,false)
+        val resizeBmp = Bitmap.createScaledBitmap(bmp, x, y + 100,false)
 
         top?.let {
             canvas.drawBitmap(resizeBmp,0f,it.toFloat(),null)
         }
         drawOpeningText(canvas, displaySize, "声でバトル！","-大声をだせ！！-")
         holder.unlockCanvasAndPost(canvas)
-
     }
     fun drawLimittime( canvas: Canvas ,percent: Float, displaySize: Point){
         val ( x, y ) = Pair(displaySize.x, displaySize.y)
@@ -99,7 +105,7 @@ class MeterSurface(activity: MainActivity?, val store: Store) : SurfaceView(acti
         val textXPosition = x/2f - (paint.textSize * text.length ) /2f + 50
         val subTextXPosition = x/2f - (subTextPaint.textSize * subText.length ) /2f + 50
 
-        val rect = RectF(0f,y/4f - paint.textSize, displaySize.x .toFloat(),y/4f * 1.1f + subTextPaint.textSize * 1.1f)
+        val rect = RectF(0f,y/4f - paint.textSize, displaySize.x .toFloat(),y/4f * 1.2f + subTextPaint.textSize * 1.2f)
         canvas.drawRect(rect,backgroundPaint)
         canvas.drawText(text, textXPosition,y/4f,paint)
         canvas.drawText(subText, subTextXPosition,y/4f * 1.3f,subTextPaint)
